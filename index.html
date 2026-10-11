@@ -102,6 +102,10 @@ button.btn{border:0;font-family:inherit;cursor:pointer}
 .resbar b{color:var(--ink)}
 .resbar button{border:0;background:rgba(120,120,128,.14);color:var(--ink);font:inherit;font-size:14px;padding:7px 14px;border-radius:980px;cursor:pointer;white-space:nowrap}
 .cats .ico{width:36px;height:36px;border-radius:10px;background:rgba(120,120,128,.12);display:grid;place-items:center;flex:none;color:var(--ink)}.cats .ico svg{width:20px;height:20px}.cats button[aria-pressed="true"] .ico{background:rgba(255,255,255,.2);color:#fff}
+.sorts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.sel{display:block;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:7px 12px 6px;cursor:pointer}
+.sel span{display:block;font-size:11.5px;color:var(--mute);line-height:1.2}
+.sel select{display:block;width:100%;border:0;background:transparent;color:var(--ink);font:inherit;font-size:15px;font-weight:600;padding:2px 18px 0 0;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%238e8e93' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 2px center;background-size:11px 8px;outline:none}
 footer{border-top:1px solid var(--line);color:var(--mute);font-size:13px;padding:22px 0 calc(22px + env(safe-area-inset-bottom,0))}
 .fab{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom,0));z-index:30;background:#25d366;color:#fff;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;box-shadow:0 8px 24px rgba(0,0,0,.25);transition:transform .2s}
 .fab:hover{transform:scale(1.08)}
@@ -134,6 +138,10 @@ footer{border-top:1px solid var(--line);color:var(--mute);font-size:13px;padding
     <h2 class="cath">Выберите категорию</h2>
     <div class="cats" id="seg" role="group" aria-label="Категории"></div>
     <input class="search" id="q" type="search" placeholder="Поиск: чайник, Dyson, фен…" aria-label="Поиск по каталогу">
+    <div class="sorts">
+      <label class="sel"><span>Бренд</span><select id="brand" aria-label="Бренд"></select></label>
+      <label class="sel"><span>Сортировка</span><select id="sort" aria-label="Сортировка"><option value="">По умолчанию</option><option value="asc">Дешевле</option><option value="desc">Дороже</option></select></label>
+    </div>
     <div class="resbar" id="res"></div>
   </div>
   <div class="grid" id="grid"></div>
@@ -219,15 +227,26 @@ const present=new Set(P.map(p=>p[1]));
 const cats=["Все",...ORDER.filter(c=>c!=="Все"&&present.has(c)),...[...present].filter(c=>!ORDER.includes(c))];
 const nOf=c=>c==="Все"?P.length:P.filter(p=>p[1]===c).length;
 const word=n=>{const m=n%10,h=n%100;return m==1&&h!=11?"товар":(m>=2&&m<=4&&(h<12||h>14))?"товара":"товаров"};
-let cat="Все",q="";
+let cat="Все",q="",brand="Все",sort="";
+const BR=["BaBylissPRO","Roborock","Dreame","Dyson","Samsung","Tefal","Braun","REMAX","SOKANY","PROLISS","CRONIER","DEESPI","LivePower","KING","MAC","Hoco"];
+const BRN={"CRONIER":"Cronier","KING":"King","SOKANY":"Sokany","PROLISS":"Proliss","DEESPI":"Deespi","REMAX":"Remax"};
+const brandOf=n=>{for(const b of BR){if(new RegExp("(^|[^A-Za-z])"+b+"(?![A-Za-z])","i").test(n))return BRN[b]||b}return"Другие"};
+P.forEach(p=>p.b=brandOf(p[0]));
 const seg=document.getElementById("seg"),grid=document.getElementById("grid");
 const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const fmt=n=>n.toLocaleString("ru-RU").replace(/\u00a0/g," ")+" ₽";
 function draw(){
   seg.innerHTML=cats.map(c=>`<button aria-pressed="${c===cat}" data-c="${esc(c)}"><span class="ico">${svg(c)}</span><span><b>${esc(c)}</b><small>${nOf(c)} ${word(nOf(c))}</small></span></button>`).join("");
-  const list=P.filter(p=>(cat==="Все"||p[1]===cat)&&(p[0]+p[2]).toLowerCase().includes(q));
+  const base=P.filter(p=>(cat==="Все"||p[1]===cat)&&(p[0]+p[2]).toLowerCase().includes(q));
+  const bc={};base.forEach(p=>bc[p.b]=(bc[p.b]||0)+1);
+  const bl=Object.keys(bc).sort((a,b)=>a==="Другие"?1:b==="Другие"?-1:a.localeCompare(b));
+  if(brand!=="Все"&&!bc[brand])brand="Все";
+  const bs=document.getElementById("brand");
+  bs.innerHTML=`<option value="Все">Все бренды (${base.length})</option>`+bl.map(b=>`<option value="${esc(b)}"${b===brand?" selected":""}>${esc(b)} (${bc[b]})</option>`).join("");
+  let list=base.filter(p=>brand==="Все"||p.b===brand);
+  if(sort)list=list.slice().sort((a,b)=>sort==="asc"?a[3]-b[3]:b[3]-a[3]);
   const res=document.getElementById("res");
-  res.innerHTML=(cat==="Все"&&!q)?`<span>Все товары: <b>${list.length}</b></span>`:`<span>${cat!=="Все"?`<b>${esc(cat)}</b>: `:""}${list.length} ${word(list.length)}</span><button id="reset">✕ Показать все</button>`;
+  res.innerHTML=(cat==="Все"&&!q&&brand==="Все")?`<span>Все товары: <b>${list.length}</b></span>`:`<span>${cat!=="Все"?`<b>${esc(cat)}</b>${brand!=="Все"?" · "+esc(brand):""}: `:brand!=="Все"?`<b>${esc(brand)}</b>: `:""}${list.length} ${word(list.length)}</span><button id="reset">✕ Показать все</button>`;
   grid.innerHTML=list.length?list.map((p,k)=>`
   <article class="card">
     <div class="photo"><img class="hq" src="${IMG[p[4]]}" alt="${esc(p[0])}" loading="${k<4?'eager':'lazy'}"></div>
@@ -242,8 +261,10 @@ function draw(){
   </article>`).join(""):'<p class="empty">Ничего не найдено. Напишите нам, подберём.</p>';
 }
 seg.addEventListener("click",e=>{const b=e.target.closest("button");if(b){cat=b.dataset.c;draw();document.getElementById("res").scrollIntoView({behavior:"smooth",block:"start"})}});
-document.getElementById("res").addEventListener("click",e=>{if(e.target.id==="reset"){cat="Все";q="";document.getElementById("q").value="";draw()}});
+document.getElementById("res").addEventListener("click",e=>{if(e.target.id==="reset"){cat="Все";q="";brand="Все";document.getElementById("q").value="";draw()}});
 document.getElementById("q").addEventListener("input",e=>{q=e.target.value.trim().toLowerCase();draw()});
+document.getElementById("brand").addEventListener("change",e=>{brand=e.target.value;draw()});
+document.getElementById("sort").addEventListener("change",e=>{sort=e.target.value;draw()});
 draw();
 let cart={};try{cart=JSON.parse(localStorage.getItem("cart")||"{}")}catch(e){}
 Object.keys(cart).forEach(k=>{if(!P[k]||!(cart[k]>0))delete cart[k]});
