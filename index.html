@@ -169,6 +169,9 @@ html{color-scheme:dark}
 .pva .btn.lg{margin-top:0;max-width:none;padding:13px 16px;font-size:16px}
 .pva .sec{white-space:nowrap}
 .pva .sec{background:transparent!important;color:var(--gold)!important;border:1.5px solid var(--gold)!important}
+.resbar .rbtn{display:flex;gap:6px;flex-shrink:0}
+.resbar .rbtn button{padding:7px 12px}
+#shcat{background:var(--gold)!important;color:#17130b!important;font-weight:600}
 </style>
 </head>
 <body>
@@ -300,6 +303,11 @@ const cats=["Все",...ORDER.filter(c=>c!=="Все"&&present.has(c)),...[...pre
 const nOf=c=>c==="Все"?P.length:P.filter(p=>p[1]===c).length;
 const word=n=>{const m=n%10,h=n%100;return m==1&&h!=11?"товар":(m>=2&&m<=4&&(h<12||h>14))?"товара":"товаров"};
 let cat="Все",q="",brand="Все",sort="";
+const TR={а:"a",б:"b",в:"v",г:"g",д:"d",е:"e",ё:"e",ж:"zh",з:"z",и:"i",й:"y",к:"k",л:"l",м:"m",н:"n",о:"o",п:"p",р:"r",с:"s",т:"t",у:"u",ф:"f",х:"h",ц:"c",ч:"ch",ш:"sh",щ:"sch",ъ:"",ы:"y",ь:"",э:"e",ю:"yu",я:"ya"};
+const slug=c=>c.toLowerCase().split("").map(ch=>TR[ch]??ch).join("").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+const catUrl=()=>location.pathname+location.search+(cat!=="Все"?"#c="+slug(cat):"");
+const setCatHash=()=>{try{history.replaceState(null,"",catUrl())}catch(e){}};
+(function(){const m=location.hash.match(/^#c=(.+)$/);if(m){const f=[...new Set(P.map(p=>p[1]))].find(c=>slug(c)===decodeURIComponent(m[1]));if(f)cat=f}})();
 const BR=["Fitbit","OLAX","Hitachi","Бирюса","ATLANT","CENTEK","Beko","LG","Midea","Gorenje","Lebenhoff","KitchenAid","ITIMAT","Hyundai","Kuppersberg","Bosch","Indesit","Miele","Breville","BaBylissPRO","Roborock","Dreame","Dyson","Samsung","Tefal","Braun","REMAX","SOKANY","PROLISS","CRONIER","DEESPI","LivePower","KING","MAC","Hoco"];
 const BRN={"Fitbit":"Google Fitbit","OLAX":"Olax","ATLANT":"Atlant","CENTEK":"Centek","ITIMAT":"Itimat","CRONIER":"Cronier","KING":"King","SOKANY":"Sokany","PROLISS":"Proliss","DEESPI":"Deespi","REMAX":"Remax"};
 const brandOf=n=>{for(const b of BR){if(new RegExp("(^|[^A-Za-z])"+b+"(?![A-Za-z])","i").test(n))return BRN[b]||b}return"Другие"};
@@ -319,7 +327,7 @@ function draw(){
   let list=base.filter(p=>brand==="Все"||p.b===brand);
   if(sort)list=list.slice().sort((a,b)=>sort==="asc"?a[3]-b[3]:b[3]-a[3]);
   const res=document.getElementById("res");
-  res.innerHTML=(cat==="Все"&&!q&&brand==="Все")?`<span>Все товары: <b>${list.length}</b></span>`:`<span>${cat!=="Все"?`<b>${esc(cat)}</b>${brand!=="Все"?" · "+esc(brand):""}: `:brand!=="Все"?`<b>${esc(brand)}</b>: `:""}${list.length} ${word(list.length)}</span><button id="reset">✕ Показать все</button>`;
+  res.innerHTML=(cat==="Все"&&!q&&brand==="Все")?`<span>Все товары: <b>${list.length}</b></span>`:`<span>${cat!=="Все"?`<b>${esc(cat)}</b>${brand!=="Все"?" · "+esc(brand):""}: `:brand!=="Все"?`<b>${esc(brand)}</b>: `:""}${list.length} ${word(list.length)}</span><span class="rbtn">${cat!=="Все"?'<button id="shcat">Ссылка на раздел</button>':''}<button id="reset">✕ Все</button></span>`;
   grid.innerHTML=list.length?list.map((p,k)=>`
   <article class="card" data-i="${P.indexOf(p)}" tabindex="0" aria-label="${esc(p[0])}">
     <div class="photo"><img class="hq" src="${IMG[p[4]]}" alt="${esc(p[0])}" loading="${k<6?'eager':'lazy'}"></div>
@@ -331,12 +339,16 @@ function draw(){
     </div>
   </article>`).join(""):'<p class="empty">Ничего не найдено. Напишите нам, подберём.</p>';
 }
-seg.addEventListener("click",e=>{const b=e.target.closest("button");if(b){cat=b.dataset.c;draw();document.getElementById("res").scrollIntoView({behavior:"smooth",block:"start"})}});
-document.getElementById("res").addEventListener("click",e=>{if(e.target.id==="reset"){cat="Все";q="";brand="Все";document.getElementById("q").value="";draw()}});
+seg.addEventListener("click",e=>{const b=e.target.closest("button");if(b){cat=b.dataset.c;setCatHash();draw();document.getElementById("res").scrollIntoView({behavior:"smooth",block:"start"})}});
+document.getElementById("res").addEventListener("click",async e=>{if(e.target.id==="reset"){cat="Все";q="";brand="Все";document.getElementById("q").value="";setCatHash();draw()}
+  if(e.target.id==="shcat"){const b=e.target,url=location.origin+catUrl();
+    try{if(navigator.share){await navigator.share({title:cat+" — TEHNOODOM",url});return}}catch(er){return}
+    try{await navigator.clipboard.writeText(url);b.textContent="Скопировано ✓";setTimeout(()=>b.textContent="Ссылка на раздел",1500)}catch(er){prompt("Ссылка на раздел:",url)}}});
 document.getElementById("q").addEventListener("input",e=>{q=e.target.value.trim().toLowerCase();draw()});
 document.getElementById("brand").addEventListener("change",e=>{brand=e.target.value;draw()});
 document.getElementById("sort").addEventListener("change",e=>{sort=e.target.value;draw()});
 draw();
+if(cat!=="Все")setTimeout(()=>document.getElementById("res").scrollIntoView({block:"start"}),300);
 let cart={};try{cart=JSON.parse(localStorage.getItem("cart")||"{}")}catch(e){}
 Object.keys(cart).forEach(k=>{if(!P[k]||!(cart[k]>0))delete cart[k]});
 const $=id=>document.getElementById(id);
@@ -382,7 +394,7 @@ function openP(i,push){const p=P[i];if(!p)return;
   pv.dataset.i=i;pv.classList.add("open");pv.setAttribute("aria-hidden","false");document.body.style.overflow="hidden";
   if(push!==false)try{history.replaceState(null,"","#p="+p[4])}catch(e){}
   $("pvx").focus({preventScroll:true});pv.querySelector(".pvp").scrollTop=0}
-function closeP(){pv.classList.remove("open");pv.setAttribute("aria-hidden","true");document.body.style.overflow="";try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}}
+function closeP(){pv.classList.remove("open");pv.setAttribute("aria-hidden","true");document.body.style.overflow="";setCatHash()}
 grid.addEventListener("click",e=>{if(e.target.closest(".add,.buy"))return;const c=e.target.closest(".card");if(c)openP(+c.dataset.i)});
 grid.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.classList.contains("card"))openP(+e.target.dataset.i)});
 $("pvx").onclick=closeP;pv.addEventListener("click",e=>{if(e.target===pv)closeP()});
