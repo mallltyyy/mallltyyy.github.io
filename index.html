@@ -174,14 +174,25 @@ html{color-scheme:dark}
 .pva .sec{background:transparent!important;color:var(--gold)!important;border:1.5px solid var(--gold)!important}
 .resbar .rbtn{display:flex;gap:6px;flex-shrink:0}
 .card .rs .nw{white-space:nowrap}.card .rs{font-size:12.5px;color:var(--gold);font-weight:600;line-height:1.25}
-.rsb{margin:16px 0 0;padding:14px 16px;border:1px solid var(--line);border-radius:16px}
-.rsb h4{margin:0 0 4px!important;color:var(--ink)!important;font-size:16px!important}
-.rsb p{font-size:13.5px;color:var(--mute);margin:0 0 8px}
-.rst{width:100%;border-collapse:collapse;font-size:14.5px}
-.rst th{font-size:12.5px;color:var(--mute);font-weight:500;text-align:left;padding:4px 0}
-.rst td{padding:7px 0;border-top:1px solid var(--line)}.rst td:nth-child(2){font-weight:700}.rst td:last-child,.rst th:last-child{text-align:right;color:var(--mute)}
-.rsbtn{display:block;width:100%;margin-top:12px;padding:12px;border-radius:980px;border:1.5px solid var(--gold);color:var(--gold)!important;text-align:center;font-size:15px;font-weight:600;text-decoration:none}
-.rsb small{display:block;margin-top:8px;font-size:12px;color:var(--mute);line-height:1.4}.rsb small a{color:var(--gold)}
+.rsb{margin:16px 0 0;padding:14px 14px 12px;border:1px solid var(--line);border-radius:18px}
+.rsb h4{margin:0 0 10px!important;color:var(--ink)!important;font-size:16px!important}
+.rsb h4 small{display:block;font-size:12.5px;color:var(--gold);font-weight:600;margin-top:2px}
+.rsseg{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:3px;border-radius:12px;background:var(--bg);margin-bottom:10px}
+.rsseg button{border:0;border-radius:9px;padding:9px;font:inherit;font-size:14px;font-weight:600;background:transparent;color:var(--mute);cursor:pointer}
+.rsseg button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.rsdown{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:14px;color:var(--mute);margin:0 0 10px!important}
+.rsdown input{width:130px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;font-size:16px;font-weight:700;padding:9px 12px;border-radius:12px;text-align:right}
+.rsrows,.rsbody{display:grid;gap:6px}
+.rsrow{display:grid;grid-template-columns:64px 1fr auto;align-items:center;gap:8px;width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:12px;background:transparent;color:var(--ink);font:inherit;font-size:14.5px;text-align:left;cursor:pointer}
+.rsrow b{font-size:16px}.rsrow b small{font-size:12px;color:var(--mute);font-weight:500}.rsrow em{font-style:normal;font-size:13px;color:var(--mute)}
+.rsrow.on{border-color:var(--gold);background:rgba(201,164,92,.1)}
+.rssum{font-size:13.5px;color:var(--mute);margin:4px 2px 0;line-height:1.45}.rssum b{color:var(--ink)}
+.rsbtn{display:block;width:100%;margin-top:6px;padding:12px;border-radius:980px;background:var(--gold);color:#17130b!important;text-align:center;font-size:15.5px;font-weight:700;text-decoration:none}
+.rsnote{display:block;margin-top:10px;font-size:12px;color:var(--mute);line-height:1.45}.rsnote a{color:var(--gold)}
+.rsbar{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin:26px auto 0;max-width:560px;padding:12px 18px;border:1px solid rgba(201,164,92,.45);border-radius:18px;background:rgba(201,164,92,.08);color:var(--ink)!important;font-size:15px;text-decoration:none;animation:rise .9s .3s cubic-bezier(.2,.7,.2,1) both}
+.pan .rsdown{display:flex;margin:0 0 10px;font-size:14px}.pan .rsdown input{width:130px;margin:0}.pan .rsb{margin-top:18px}
+@media (max-width:600px){.rsbar{margin:26px 16px 0}}
+.rsbar b{color:var(--gold)}.rsbar span{color:var(--mute)}
 .resbar .rbtn button{padding:7px 12px}
 #shcat{background:var(--gold)!important;color:#17130b!important;font-weight:600}
 .cats .cgh{grid-column:1/-1;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin:12px 2px 0}
@@ -197,7 +208,7 @@ html{color-scheme:dark}
 <body>
 <nav><div class="wrap">
   <a class="brand" href="#top"><img src="data:image/jpeg;base64,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" alt="">TEHNOODOM</a>
-  <div class="links"><a href="#catalog">Каталог</a><a href="#how">Как заказать</a><a href="#info">Доставка и гарантия</a><a href="#contacts">Контакты</a></div>
+  <div class="links"><a href="#catalog">Каталог</a><a href="#how">Как заказать</a><a href="#info">Доставка и гарантия</a><a href="rassrochka.html">Рассрочка</a><a href="#contacts">Контакты</a></div>
   <a class="igbtn" href="https://instagram.com/tehnoodom" target="_blank" rel="noopener" aria-label="Обзоры в Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/></svg></a>
   <a class="btn" href="#catalog">Каталог</a>
 </div></nav>
@@ -212,6 +223,7 @@ html{color-scheme:dark}
     <a class="link" href="tel:+79280040943">Позвонить</a>
     <a class="link" href="https://instagram.com/tehnoodom" target="_blank" rel="noopener">Обзоры в Instagram</a>
   </div>
+  <a class="rsbar" href="rassrochka.html"><b>Исламская рассрочка</b><span>до 12 месяцев · со взносом и без · от 25 000 ₽</span></a>
   <div class="trust"><span><b id="tc">17 товаров</b> в наличии</span><span><b>Доставка</b> по России</span><span><b>Грозный</b>, ул. Назарбаева 98</span></div>
 </section>
 
@@ -250,11 +262,11 @@ html{color-scheme:dark}
       <li><b>Возврат</b> не предусмотрен.</li>
     </ul></div>
     <div><h2>Рассрочка</h2><ul>
-      <li><b>На товары от 25 000 ₽</b> через компанию DIRHAM.</li>
-      <li><b>Срок:</b> 3, 6, 9 или 12 месяцев.</li>
-      <li><b>Без взноса:</b> наценка 12%, 22%, 30%, 40%.</li>
-      <li><b>Со взносом:</b> наценка 9%, 15%, 22%, 30%.</li>
-      <li>Точный расчёт: <a class="link" href="https://dirham95.ru" target="_blank" rel="noopener">калькулятор DIRHAM</a>.</li>
+      <li><b>Исламская рассрочка</b> через компанию DIRHAM на товары и заказы от 25 000 ₽.</li>
+      <li><b>Срок:</b> 3, 6, 9 или 12 месяцев, со взносом и без.</li>
+      <li><b>Наценка без взноса:</b> 12%, 22%, 30%, 40%; <b>со взносом:</b> 9%, 15%, 22%, 30%.</li>
+      <li><b>Нужно:</b> возраст от 20 лет, прописка в ЧР, паспорт и номер покупателя и поручителя.</li>
+      <li><a class="link" href="rassrochka.html">Подробнее и калькулятор</a></li>
     </ul></div>
   </div>
 
@@ -320,8 +332,10 @@ html{color-scheme:dark}
   <label for="cm">Комментарий (по желанию)</label><input type="text" id="cm">
   <p class="err" id="err">Укажите адрес доставки.</p>
   <button class="btn lg" id="send">Оформить в WhatsApp</button>
+  <div class="rsb" id="cartrs" hidden><h4>Или в рассрочку<small>Исламская, через DIRHAM · на заказ от 25 000 ₽</small></h4><div id="cartrsw"></div></div>
 </div></div>
 
+<script src="rs.js"></script>
 <script>
 const IMG={"chopper": "ph-chopper.webp", "samsung": "ph-samsung.webp", "s214": "ph-s214.webp", "s213": "ph-s213.webp", "cf06": "ph-cf06.webp", "king": "ph-king.webp", "dar24": "ph-dar24.webp", "dar22": "ph-dar22.webp", "mc5817": "ph-mc5817.webp", "mac": "ph-mac.webp", "cr1298": "ph-cr1298.webp", "cr1268": "ph-cr1268.webp", "cr1296": "ph-cr1296.webp", "cr1255": "ph-cr1255.webp", "s1237": "ph-s1237.webp", "s1433": "ph-s1433.webp", "s1443": "ph-s1443.webp", "bab2654": "ph-bab2654.webp", "bab2073": "ph-bab2073.webp", "bab2091": "ph-bab2091.webp", "sk1051": "ph-sk1051.webp", "cr1518": "ph-cr1518.webp", "sk1097": "ph-sk1097.webp", "cr1522": "ph-cr1522.webp", "cr1504": "ph-cr1504.webp", "sk1083": "ph-sk1083.webp", "pro23": "ph-pro23.webp", "sk18007": "ph-sk18007.webp", "sk18005": "ph-sk18005.webp", "bab3550": "ph-bab3550.webp", "bab3000": "ph-bab3000.webp", "bab6520": "ph-bab6520.webp", "cr970a": "ph-cr970a.webp", "cr6944": "ph-cr6944.webp", "rsh08": "ph-rsh08.webp", "fv6870": "ph-fv6870.webp", "fv2867": "ph-fv2867.webp", "si7149": "ph-si7149.webp", "cr1512": "ph-cr1512.webp", "skyd2111": "ph-skyd2111.webp", "kp6100": "ph-kp6100.webp", "kc3323": "ph-kc3323.webp", "aj2205": "ph-aj2205.webp", "pro5123": "ph-pro5123.webp", "crm13": "ph-crm13.webp", "sk13020": "ph-sk13020.webp", "crm16": "ph-crm16.webp", "crm18": "ph-crm18.webp", "crm19": "ph-crm19.webp", "crm23": "ph-crm23.webp", "s8pro": "ph-s8pro.webp", "s8proplus": "ph-s8proplus.webp", "qrevoc": "ph-qrevoc.webp", "z70": "ph-z70.webp", "l50": "ph-l50.webp", "x50": "ph-x50.webp", "x50master": "ph-x50master.webp", "x60": "ph-x60.webp", "f21plus": "ph-f21plus.webp", "v15": "ph-v15.webp", "cy26": "ph-cy26.webp", "f25lt": "ph-f25lt.webp", "f25ace": "ph-f25ace.webp", "f25combo": "ph-f25combo.webp", "h60": "ph-h60.webp", "r10slite": "ph-r10slite.webp", "r10": "ph-r10.webp", "t30pro": "ph-t30pro.webp", "z20": "ph-z20.webp", "f25litecombo": "ph-f25litecombo.webp", "f25steam": "ph-f25steam.webp", "v16": "ph-v16.webp", "cx1": "ph-cx1.webp", "h60hubpro": "ph-h60hubpro.webp", "ixeo": "ph-ixeo.webp", "is9090": "ph-is9090.webp", "vst072x": "ph-vst072x.webp", "dfz5175": "ph-dfz5175.webp", "dfz5175a": "ph-dfz5175a.webp", "twk8613p": "ph-twk8613p.webp", "ht611bb": "ph-ht611bb.webp", "hf614bb": "ph-hf614bb.webp", "ht617b": "ph-ht617b.webp", "ms23k": "ph-ms23k.webp", "hymd3011": "ph-hymd3011.webp", "hymd3008": "ph-hymd3008.webp", "itimat60": "ph-itimat60.webp", "5kek1701": "ph-5kek1701.webp", "sr610": "ph-sr610.webp", "inlinea60x": "ph-inlinea60x.webp", "rlhsge551": "ph-rlhsge551.webp", "rlhsgg558": "ph-rlhsgg558.webp", "rlhsgg558wh": "ph-rlhsgg558wh.webp", "rlhsgg558bl": "ph-rlhsgg558bl.webp", "rlhsge551sl": "ph-rlhsge551sl.webp", "bo6735e05b": "ph-bo6735e05b.webp", "gtw641akb2": "ph-gtw641akb2.webp", "mg693tgb": "ph-mg693tgb.webp", "mo611103ygb": "ph-mo611103ygb.webp", "f1096nd3": "ph-f1096nd3.webp", "f1096td3": "ph-f1096td3.webp", "f2m5hs6s": "ph-f2m5hs6s.webp", "f1096td3s": "ph-f1096td3s.webp", "f2y1ns3w": "ph-f2y1ns3w.webp", "f2v3hs4w": "ph-f2v3hs4w.webp", "tw4v3rs6w": "ph-tw4v3rs6w.webp", "f2y1ws6j": "ph-f2y1ws6j.webp", "f2t3hs6w": "ph-f2t3hs6w.webp", "f1296cds0x": "ph-f1296cds0x.webp", "beko65": "ph-beko65.webp", "kc5408": "ph-kc5408.webp", "kc3505": "ph-kc3505.webp", "dee02b": "ph-dee02b.webp", "kc7101": "ph-kc7101.webp", "kc5406": "ph-kc5406.webp", "kc1309": "ph-kc1309.webp", "kc1003": "ph-kc1003.webp", "kc7102": "ph-kc7102.webp", "kc3071": "ph-kc3071.webp", "kc2501": "ph-kc2501.webp", "gab509clcl": "ph-gab509clcl.webp", "mdrb509": "ph-mdrb509.webp", "gcb509aemw": "ph-gcb509aemw.webp", "gab509cesl": "ph-gab509cesl.webp", "ct1712": "ph-ct1712.webp", "m7606": "ph-m7606.webp", "ct1744wg": "ph-ct1744wg.webp", "grb922febm": "ph-grb922febm.webp", "grb922fmbm": "ph-grb922fmbm.webp", "gcb257kehw": "ph-gcb257kehw.webp", "itr5200w": "ph-itr5200w.webp", "m461rn": "ph-m461rn.webp", "b521rn": "ph-b521rn.webp", "gab419slgl": "ph-gab419slgl.webp", "gab419sqgl": "ph-gab419sqgl.webp", "5kek1522": "ph-5kek1522.webp", "rbg410": "ph-rbg410.webp", "olaxax9": "ph-olaxax9.webp", "cr8824c": "ph-cr8824c.webp", "cr8826": "ph-cr8826.webp", "cr1606": "ph-cr1606.webp", "sk314": "ph-sk314.webp", "sk311": "ph-sk311.webp", "cr1157": "ph-cr1157.webp", "kc5801": "ph-kc5801.webp", "kc5802": "ph-kc5802.webp", "fitbitair": "ph-fitbitair.webp", "sm5021s": "ph-sm5021s.webp", "sm5011": "ph-sm5011.webp", "sk06035": "ph-sk06035.webp", "eq35": "ph-eq35.webp", "ew85": "ph-ew85.webp", "ew75": "ph-ew75.webp", "eq37": "ph-eq37.webp", "olaxmc50": "ph-olaxmc50.webp", "kc2211": "ph-kc2211.webp", "j141": "ph-j141.webp", "j172a": "ph-j172a.webp", "fp60": "ph-fp60.webp", "rpp118": "ph-rpp118.webp", "fp22": "ph-fp22.webp", "fc22": "ph-fc22.webp", "rpp117": "ph-rpp117.webp", "fp1": "ph-fp1.webp", "fp5": "ph-fp5.webp", "rpp177": "ph-rpp177.webp", "j101a": "ph-j101a.webp", "j102a": "ph-j102a.webp", "rpp100": "ph-rpp100.webp", "w35max": "ph-w35max.webp", "nokia5310": "ph-nokia5310.webp", "g860pro": "ph-g860pro.webp", "phone3310": "ph-phone3310.webp", "phone1202": "ph-phone1202.webp"};
 const SZ={"chopper":[405,720],"samsung":[587,720],"s214":[720,480],"s213":[600,600],"cf06":[480,720],"king":[480,720],"dar24":[541,720],"dar22":[630,630],"mc5817":[480,720],"mac":[720,720],"cr1298":[720,435],"cr1268":[720,645],"cr1296":[720,720],"cr1255":[720,534],"s1237":[540,720],"s1433":[540,720],"s1443":[540,720],"bab2654":[860,1290],"bab2073":[860,860],"bab2091":[860,860],"sk1051":[860,860],"cr1518":[860,860],"sk1097":[860,860],"cr1522":[860,860],"cr1504":[860,860],"sk1083":[860,860],"pro23":[860,860],"sk18007":[860,860],"sk18005":[860,860],"bab3550":[860,860],"bab3000":[860,860],"bab6520":[860,860],"cr970a":[860,860],"cr6944":[860,860],"rsh08":[860,1074],"fv6870":[860,1074],"fv2867":[860,860],"si7149":[860,860],"cr1512":[860,917],"skyd2111":[860,1074],"kp6100":[860,1032],"kc3323":[860,1074],"aj2205":[860,1290],"pro5123":[860,1290],"crm13":[860,1290],"sk13020":[860,1290],"crm16":[860,1290],"crm18":[860,1290],"crm19":[860,1290],"crm23":[860,1290],"s8pro":[860,1290],"s8proplus":[860,1290],"qrevoc":[860,1290],"z70":[860,1290],"l50":[860,1290],"x50":[860,1074],"x50master":[860,1074],"x60":[860,1074],"f21plus":[860,1290],"v15":[860,1290],"cy26":[860,1074],"f25lt":[860,1290],"f25ace":[860,1290],"f25combo":[860,1290],"h60":[860,1290],"r10slite":[860,1290],"r10":[860,1290],"t30pro":[860,1290],"z20":[860,1290],"f25litecombo":[860,1290],"f25steam":[860,1290],"v16":[860,1290],"cx1":[860,1290],"h60hubpro":[860,1290],"ixeo":[860,1074],"is9090":[860,1074],"vst072x":[860,1074],"dfz5175":[860,1074],"dfz5175a":[860,1074],"twk8613p":[860,1074],"ht611bb":[860,1074],"hf614bb":[860,1074],"ht617b":[860,1074],"ms23k":[860,1074],"hymd3011":[860,1074],"hymd3008":[860,1290],"itimat60":[860,1074],"5kek1701":[860,1074],"sr610":[860,1290],"inlinea60x":[860,1074],"rlhsge551":[860,1290],"rlhsgg558":[860,1290],"rlhsgg558wh":[860,1290],"rlhsgg558bl":[860,1290],"rlhsge551sl":[860,1290],"bo6735e05b":[860,1290],"gtw641akb2":[860,1074],"mg693tgb":[860,1290],"mo611103ygb":[860,1290],"f1096nd3":[860,1074],"f1096td3":[860,1075],"f2m5hs6s":[860,1290],"f1096td3s":[860,1075],"f2y1ns3w":[860,1290],"f2v3hs4w":[860,1075],"tw4v3rs6w":[860,1290],"f2y1ws6j":[860,1290],"f2t3hs6w":[860,1290],"f1296cds0x":[860,1290],"beko65":[860,1290],"kc5408":[860,1290],"kc3505":[860,1075],"dee02b":[860,1075],"kc7101":[860,1075],"kc5406":[860,1290],"kc1309":[860,1290],"kc1003":[860,1075],"kc7102":[860,1290],"kc3071":[860,1075],"kc2501":[860,1075],"gab509clcl":[860,1032],"mdrb509":[860,1290],"gcb509aemw":[860,1075],"gab509cesl":[860,1075],"ct1712":[860,1075],"m7606":[860,1075],"ct1744wg":[860,1075],"grb922febm":[860,1290],"grb922fmbm":[860,1290],"gcb257kehw":[860,1290],"itr5200w":[860,1075],"m461rn":[860,1075],"b521rn":[860,1075],"gab419slgl":[860,1290],"gab419sqgl":[860,1290],"5kek1522":[860,1075],"rbg410":[860,1290],"olaxax9":[860,1075],"cr8824c":[860,1290],"cr8826":[860,1290],"cr1606":[860,1075],"sk314":[860,860],"sk311":[860,860],"cr1157":[860,1075],"kc5801":[860,1075],"kc5802":[860,1075],"fitbitair":[860,1075],"sm5021s":[860,1290],"sm5011":[860,1290],"sk06035":[860,1075],"eq35":[860,1075],"ew85":[860,1075],"ew75":[860,1075],"eq37":[860,1075],"olaxmc50":[860,1075],"kc2211":[860,1075],"j141":[860,1075],"j172a":[860,1075],"fp60":[860,1075],"rpp118":[860,1290],"fp22":[860,1075],"fc22":[860,1075],"rpp117":[860,1075],"fp1":[860,1075],"fp5":[860,1075],"rpp177":[860,1075],"j101a":[860,1075],"j102a":[860,1075],"rpp100":[860,1075],"w35max":[860,1075],"nokia5310":[860,1075],"g860pro":[860,1075],"phone3310":[860,1075],"phone1202":[860,852]};
@@ -348,10 +362,7 @@ const seg=document.getElementById("seg"),grid=document.getElementById("grid");
 const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const fmt=n=>n.toLocaleString("ru-RU").replace(/\u00a0/g," ")+" ₽";
 const SITE="https://tehnoodom.github.io/";const pUrl=k=>SITE+"p/"+k+".html";const cUrl=c=>SITE+"c/"+slug(c)+".html";
-const RSMIN=25000,RSN=[[3,12],[6,22],[9,30],[12,40]];
-const rsM=(pr,n,m)=>Math.round(pr*(1+m/100)/n/100)*100;
-const rsOk=p=>p[3]>=RSMIN;
-const waRs=i=>{const p=P[i];return"https://wa.me/79280040943?text="+encodeURIComponent("Здравствуйте! Хочу оформить в рассрочку:\n"+p[0]+" — "+fmt(p[3])+"\n"+pUrl(p[4]))};
+const rsOk=p=>p[3]>=RS.MIN;
 const waOrder=i=>{const p=P[i];return"https://wa.me/79280040943?text="+encodeURIComponent("Здравствуйте! Хочу заказать:\n"+p[0]+(p[3]?" — "+fmt(p[3]):"")+"\n"+pUrl(p[4]))};
 function draw(){
   const tile=c=>`<button aria-pressed="${c===cat}" data-c="${esc(c)}"><span class="ico">${svg(c)}</span><span><b>${esc(c)}</b><small>${nOf(c)} ${word(nOf(c))}</small></span></button>`;
@@ -374,7 +385,7 @@ function draw(){
     <div class="body">
       <span class="cat">${esc(p.b!=="Другие"?p.b:p[1])}</span>
       <h3>${esc(p[0])}</h3>
-      <span class="price${p[3]?'':' ask'}">${p[3]?fmt(p[3]):"Цена по запросу"}</span>${rsOk(p)?`<span class="rs">Рассрочка <span class="nw">от ${fmt(rsM(p[3],12,40)).replace(" ₽","")} ₽/мес</span></span>`:""}
+      <span class="price${p[3]?'':' ask'}">${p[3]?fmt(p[3]):"Цена по запросу"}</span>${rsOk(p)?`<span class="rs">Рассрочка <span class="nw">от ${fmt(RS.from(p[3])).replace(" ₽","")} ₽/мес</span></span>`:""}
       <div class="acts"><a class="btn buy" href="${waOrder(P.indexOf(p))}" target="_blank" rel="noopener">Заказать</a><button class="cadd add" data-i="${P.indexOf(p)}" aria-label="Добавить в корзину" title="В корзину"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2.2l2.1 10.2a1.6 1.6 0 0 0 1.6 1.3h8.4a1.6 1.6 0 0 0 1.6-1.2L20.5 8H6.2"/><circle cx="9.5" cy="19.5" r="1.3"/><circle cx="17" cy="19.5" r="1.3"/><path d="M13 9.5v4M11 11.5h4"/></svg></button></div>
     </div>
   </article>`).join(""):'<p class="empty">Ничего не найдено. Напишите нам, подберём.</p>';
@@ -398,7 +409,7 @@ const sum=()=>Object.entries(cart).reduce((a,[i,n])=>a+P[i][3]*n,0);
 function drawCart(){
   const c=cnt();$("cnt").textContent=c;$("cartBtn").classList.toggle("show",c>0);
   $("items").innerHTML=Object.entries(cart).map(([i,n])=>`<div class="ci"><div><b>${esc(P[i][0])}</b><small>${fmt(P[i][3])}</small></div><div class="qty"><button data-m="${i}">−</button><span>${n}</span><button data-p="${i}">+</button></div></div>`).join("");
-  $("sum").textContent=fmt(sum());saveCart();
+  $("sum").textContent=fmt(sum());saveCart();if(typeof drawCartRS==="function")drawCartRS();
   if(!c)$("ov").classList.remove("open");
 }
 grid.addEventListener("click",e=>{const b=e.target.closest(".add");if(!b)return;
@@ -410,17 +421,22 @@ $("cartBtn").onclick=()=>$("ov").classList.add("open");
 $("cx").onclick=()=>$("ov").classList.remove("open");
 $("ov").addEventListener("click",e=>{if(e.target===$("ov"))$("ov").classList.remove("open")});
 document.querySelectorAll('input[name=dm]').forEach(r=>r.onchange=()=>{$("addrBox").hidden=document.querySelector('input[name=dm]:checked').value!=="ship"});
-$("send").onclick=()=>{
+function cartOk(){const ship=document.querySelector('input[name=dm]:checked').value==="ship";
+  if(ship&&!$("addr").value.trim()){$("err").style.display="block";$("addr").focus();return false}
+  $("err").style.display="none";return true}
+function cartText(rs){
   const ship=document.querySelector('input[name=dm]:checked').value==="ship",addr=$("addr").value.trim();
-  if(ship&&!addr){$("err").style.display="block";$("addr").focus();return}
-  $("err").style.display="none";
-  let t="Здравствуйте! Хочу оформить заказ:\n\n"+Object.entries(cart).map(([i,n],k)=>`${k+1}. ${P[i][0]} — ${n} × ${fmt(P[i][3])} = ${fmt(P[i][3]*n)}`).join("\n");
+  let t="Здравствуйте! Хочу оформить заказ"+(rs?" в рассрочку":"")+":\n\n"+Object.entries(cart).map(([i,n],k)=>`${k+1}. ${P[i][0]} — ${n} × ${fmt(P[i][3])} = ${fmt(P[i][3]*n)}`).join("\n");
   t+=`\n\nИтого: ${fmt(sum())} (без доставки)\n`;
+  if(rs)t+=rs.line+"\n";
   t+=ship?`Получение: доставка\nАдрес: ${addr}`:"Получение: самовывоз (Грозный, ул. Назарбаева 98)";
   if($("nm").value.trim())t+=`\nИмя: ${$("nm").value.trim()}`;
   if($("cm").value.trim())t+=`\nКомментарий: ${$("cm").value.trim()}`;
-  window.open("https://wa.me/79280040943?text="+encodeURIComponent(t),"_blank");
-};
+  return t}
+$("send").onclick=()=>{if(cartOk())window.open("https://wa.me/79280040943?text="+encodeURIComponent(cartText()),"_blank")};
+let cartRS=null;
+function drawCartRS(){const s=sum(),b=$("cartrs");b.hidden=s<RS.MIN;if(b.hidden)return;
+  if(!cartRS)cartRS=RS.mount($("cartrsw"),{price:s,getText:st=>cartText(st),check:cartOk,btn:"Оформить заказ в рассрочку"});else cartRS.set(s)}
 $("addr").addEventListener("input",()=>{$("err").style.display="none"});
 (function(){const n=P.length,m=n%10,h=n%100;document.getElementById("tc").textContent=n+" "+(m==1&&h!=11?"товар":(m>=2&&m<=4&&(h<12||h>14))?"товара":"товаров")})();
 drawCart();
@@ -430,7 +446,8 @@ function openP(i,push){const p=P[i];if(!p)return;
   $("pvi").src=IMG[p[4]];$("pvi").alt=p[0];$("pvc").textContent=p.b!=="Другие"?p.b+" · "+p[1]:p[1];
   $("pvt").textContent=p[0];$("pvpr").textContent=p[3]?fmt(p[3]):"Цена по запросу";
   $("pvl").innerHTML=p[2].split(" · ").map(x=>`<li>${esc(x)}</li>`).join("");
-  const rb=$("pvrs");if(rsOk(p)){rb.hidden=false;rb.innerHTML=`<h4>Рассрочка через DIRHAM</h4><p>Без первого взноса, примерный расчёт:</p><table class="rst"><tr><th>Срок</th><th>В месяц</th><th>Наценка</th></tr>${RSN.map(([n,m])=>`<tr><td>${n} мес.</td><td>≈ ${fmt(rsM(p[3],n,m))}</td><td>${m}%</td></tr>`).join("")}</table><a class="rsbtn" href="${waRs(i)}" target="_blank" rel="noopener">Оформить в рассрочку</a><small>Со взносом наценка меньше: 9–30%. Точную сумму и одобрение даёт компания DIRHAM. <a href="https://dirham95.ru" target="_blank" rel="noopener">Калькулятор DIRHAM</a></small>`}else{rb.hidden=true;rb.innerHTML=""}
+  const rb=$("pvrs");if(rsOk(p)){rb.hidden=false;rb.innerHTML='<h4>Рассрочка<small>Исламская, через DIRHAM · 3–12 месяцев</small></h4><div></div>';
+    RS.mount(rb.lastChild,{price:p[3],getText:st=>"Здравствуйте! Хочу оформить в рассрочку:\n"+p[0]+" — "+fmt(p[3])+"\n"+pUrl(p[4])+"\n\n"+st.line})}else{rb.hidden=true;rb.innerHTML=""}
   $("pvadd").dataset.i=i;$("pvwa").href=waOrder(i);$("pvig").href=p[6]||"https://instagram.com/tehnoodom";$("pvig").querySelector("span").textContent=p[6]?"Смотреть обзор этого товара":"Смотреть обзоры в Instagram";
   pv.dataset.i=i;pv.classList.add("open");pv.setAttribute("aria-hidden","false");document.body.style.overflow="hidden";
   if(push!==false)try{history.replaceState(null,"","#p="+p[4])}catch(e){}
