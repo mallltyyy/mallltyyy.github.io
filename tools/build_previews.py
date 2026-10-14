@@ -64,6 +64,7 @@ LOGO=re.search(r'<a class="brand"[^>]*><img src="(data:[^"]+)"',src).group(1)
 ICON=re.search(r'<link rel="icon" href="(data:[^"]+)"',src).group(1)
 BRN=json.loads(re.search(r'const BRN=(\{.*?\});',src).group(1)) if 'const BRN=' in src else {}
 RSMIN=25000
+TMR=re.search(r'<!-- Top.Mail.Ru counter -->.*?<!-- /Top.Mail.Ru counter -->',src,re.S).group(0)
 def og_rs():
     out='og/rassrochka.jpg'
     W,H=1200,630; im=Image.new('RGB',(W,H),(11,11,12)); d=ImageDraw.Draw(im)
@@ -107,6 +108,7 @@ open('rassrochka.html','w',encoding='utf-8').write(f'''<!doctype html>
 <meta property="og:image" content="{BASE}og/rassrochka.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta property="og:url" content="{BASE}rassrochka.html"><meta property="og:locale" content="ru_RU"><meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0b0b0c"><link rel="icon" href="{ICON}">
+{TMR}
 <style>
 :root{{--bg:#0b0b0c;--card:#161618;--ink:#f3f1ec;--mute:#a19d95;--line:#2c2b29;--gold:#c9a45c}}
 *{{box-sizing:border-box;margin:0}}html{{scroll-behavior:smooth}}
