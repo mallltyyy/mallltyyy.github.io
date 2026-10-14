@@ -208,6 +208,9 @@ html{color-scheme:dark}
 .feat .dlvbox div{background:none;border-radius:0;padding:0}.feat .dlvbox .dlrow{padding:9px 2px}
 .dlvall{margin-top:14px}.dlvall summary{cursor:pointer;color:var(--gold);font-size:15px}.dlvall h4{margin:14px 0 4px;font-size:14px;color:var(--mute)}
 #dlvlist{max-height:420px;overflow:auto;margin-top:6px;padding-right:4px}
+.bars{display:grid;gap:10px;max-width:560px;margin:26px auto 0}.bars .rsbar{margin:0;width:100%}
+@media (max-width:600px){.bars{margin:22px 16px 0}}
+.pvdl{display:block;margin-top:6px;padding:0;border:0;background:none;color:var(--mute);font:inherit;font-size:14px;cursor:pointer;text-align:left}.pvdl u{color:var(--gold);text-underline-offset:3px}
 .rsbar b{color:var(--gold)}.rsbar span{color:var(--mute)}
 .resbar .rbtn button{padding:7px 12px}
 #shcat{background:var(--gold)!important;color:#17130b!important;font-weight:600}
@@ -239,7 +242,8 @@ html{color-scheme:dark}
     <a class="link" href="tel:+79280040943">Позвонить</a>
     <a class="link" href="https://instagram.com/tehnoodom" target="_blank" rel="noopener">Обзоры в Instagram</a>
   </div>
-  <a class="rsbar" href="rassrochka.html"><b>Исламская рассрочка</b><span>до 12 месяцев · со взносом и без · от 25 000 ₽</span></a>
+  <div class="bars"><a class="rsbar" href="rassrochka.html"><b>Исламская рассрочка</b><span>до 12 месяцев · со взносом и без · от&nbsp;25&nbsp;000&nbsp;₽</span></a>
+  <a class="rsbar" href="#delivery"><b>Доставка</b><span>мелкий товар от&nbsp;350&nbsp;₽ · крупная техника по Грозному 1&nbsp;000&nbsp;₽</span></a></div>
   <div class="trust"><span><b id="tc">17 товаров</b> в каталоге</span><span><b>Доставка</b> по России</span><span><b>Грозный</b>, ул. Назарбаева 98</span></div>
 </section>
 
@@ -339,6 +343,7 @@ html{color-scheme:dark}
     <span class="cat" id="pvc"></span>
     <h2 id="pvt"></h2>
     <div class="pvprice" id="pvpr"></div>
+    <button class="pvdl" id="pvdl" type="button"></button>
     <h4>Характеристики</h4>
     <ul class="pvl" id="pvl"></ul>
     <div class="pva"><a class="btn lg wa" id="pvwa" target="_blank" rel="noopener">Заказать</a><button class="btn lg add sec" id="pvadd">В корзину</button><a class="pvcall" href="tel:+79280040943" aria-label="Позвонить" title="Позвонить"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></a></div>
@@ -492,6 +497,7 @@ function openP(i,push){const p=P[i];if(!p)return;
     RS.mount(rb.lastChild,{price:p[3],getText:st=>"Здравствуйте! Хочу оформить в рассрочку:\n"+p[0]+" — "+fmt(p[3])+"\n"+pUrl(p[4])+"\n\n"+st.line})}else{rb.hidden=true;rb.innerHTML=""}
   const sim=P.map((x,k)=>[x,k]).filter(([x,k])=>k!==+i&&x[1]===p[1]).sort((a,b)=>Math.abs(a[0][3]-p[3])-Math.abs(b[0][3]-p[3])).slice(0,8);
   $("pvsim").hidden=!sim.length;$("pvsimr").innerHTML=sim.map(([x,k])=>`<button class="simc" data-i="${k}"><img src="${IMG[x[4]]}" alt="" loading="lazy"><span>${esc(splitName(x[0])[1])}</span><b>${x[3]?fmt(x[3]):"Цена по запросу"}</b></button>`).join("");$("pvsimr").scrollLeft=0;
+  $("pvdl").innerHTML=(BIG.has(p[1])?"Доставка по Грозному 1 000 ₽":"Доставка по Грозному от 350 ₽")+" · <u>все тарифы</u>";
   $("pvadd").dataset.i=i;$("pvwa").href=waOrder(i);$("pvig").href=p[6]||"https://instagram.com/tehnoodom";$("pvig").querySelector("span").textContent=p[6]?"Смотреть обзор этого товара":"Смотреть обзоры в Instagram";
   pv.dataset.i=i;pv.classList.add("open");pv.setAttribute("aria-hidden","false");document.body.style.overflow="hidden";
   if(push!==false)try{history.replaceState(null,"","#p="+p[4])}catch(e){}
@@ -500,6 +506,8 @@ function closeP(){pv.classList.remove("open");pv.setAttribute("aria-hidden","tru
 grid.addEventListener("click",e=>{if(e.target.closest(".add,.buy"))return;const c=e.target.closest(".card");if(c)openP(+c.dataset.i)});
 grid.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.classList.contains("card"))openP(+e.target.dataset.i)});
 $("pvsimr").addEventListener("click",e=>{const c=e.target.closest(".simc");if(c)openP(+c.dataset.i)});
+const BIG=new Set(["Холодильники и морозильники","Стиральные машины","Плиты"]);
+$("pvdl").onclick=()=>{closeP();setTimeout(()=>document.getElementById("delivery").scrollIntoView({behavior:"smooth",block:"start"}),60)};
 $("pvx").onclick=closeP;pv.addEventListener("click",e=>{if(e.target===pv)closeP()});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&pv.classList.contains("open"))closeP()});
 $("pvadd").onclick=()=>{const i=$("pvadd").dataset.i;cart[i]=(cart[i]||0)+1;drawCart();$("pvadd").textContent="Добавлено ✓";setTimeout(()=>$("pvadd").textContent="В корзину",1200)};
