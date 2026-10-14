@@ -173,6 +173,15 @@ html{color-scheme:dark}
 .pva .sec{white-space:nowrap}
 .pva .sec{background:transparent!important;color:var(--gold)!important;border:1.5px solid var(--gold)!important}
 .resbar .rbtn{display:flex;gap:6px;flex-shrink:0}
+.card .rs .nw{white-space:nowrap}.card .rs{font-size:12.5px;color:var(--gold);font-weight:600;line-height:1.25}
+.rsb{margin:16px 0 0;padding:14px 16px;border:1px solid var(--line);border-radius:16px}
+.rsb h4{margin:0 0 4px!important;color:var(--ink)!important;font-size:16px!important}
+.rsb p{font-size:13.5px;color:var(--mute);margin:0 0 8px}
+.rst{width:100%;border-collapse:collapse;font-size:14.5px}
+.rst th{font-size:12.5px;color:var(--mute);font-weight:500;text-align:left;padding:4px 0}
+.rst td{padding:7px 0;border-top:1px solid var(--line)}.rst td:nth-child(2){font-weight:700}.rst td:last-child,.rst th:last-child{text-align:right;color:var(--mute)}
+.rsbtn{display:block;width:100%;margin-top:12px;padding:12px;border-radius:980px;border:1.5px solid var(--gold);color:var(--gold)!important;text-align:center;font-size:15px;font-weight:600;text-decoration:none}
+.rsb small{display:block;margin-top:8px;font-size:12px;color:var(--mute);line-height:1.4}.rsb small a{color:var(--gold)}
 .resbar .rbtn button{padding:7px 12px}
 #shcat{background:var(--gold)!important;color:#17130b!important;font-weight:600}
 .cats .cgh{grid-column:1/-1;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin:12px 2px 0}
@@ -240,6 +249,13 @@ html{color-scheme:dark}
       <li><b>Обмен при браке:</b> на такой же товар, если сохранён товарный вид.</li>
       <li><b>Возврат</b> не предусмотрен.</li>
     </ul></div>
+    <div><h2>Рассрочка</h2><ul>
+      <li><b>На товары от 25 000 ₽</b> через компанию DIRHAM.</li>
+      <li><b>Срок:</b> 3, 6, 9 или 12 месяцев.</li>
+      <li><b>Без взноса:</b> наценка 12%, 22%, 30%, 40%.</li>
+      <li><b>Со взносом:</b> наценка 9%, 15%, 22%, 30%.</li>
+      <li>Точный расчёт: <a class="link" href="https://dirham95.ru" target="_blank" rel="noopener">калькулятор DIRHAM</a>.</li>
+    </ul></div>
   </div>
 
   <div class="cta">
@@ -287,6 +303,7 @@ html{color-scheme:dark}
     <h4>Характеристики</h4>
     <ul class="pvl" id="pvl"></ul>
     <div class="pva"><a class="btn lg wa" id="pvwa" target="_blank" rel="noopener">Заказать</a><button class="btn lg add sec" id="pvadd">В корзину</button></div>
+    <div class="rsb" id="pvrs" hidden></div>
     <a class="pvig" id="pvig" href="https://instagram.com/tehnoodom" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/></svg><span>Смотреть обзоры в Instagram</span></a>
     <button class="pvsh" id="pvsh">Поделиться товаром</button>
   </div>
@@ -331,6 +348,10 @@ const seg=document.getElementById("seg"),grid=document.getElementById("grid");
 const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const fmt=n=>n.toLocaleString("ru-RU").replace(/\u00a0/g," ")+" ₽";
 const SITE="https://tehnoodom.github.io/";const pUrl=k=>SITE+"p/"+k+".html";const cUrl=c=>SITE+"c/"+slug(c)+".html";
+const RSMIN=25000,RSN=[[3,12],[6,22],[9,30],[12,40]];
+const rsM=(pr,n,m)=>Math.round(pr*(1+m/100)/n/100)*100;
+const rsOk=p=>p[3]>=RSMIN;
+const waRs=i=>{const p=P[i];return"https://wa.me/79280040943?text="+encodeURIComponent("Здравствуйте! Хочу оформить в рассрочку:\n"+p[0]+" — "+fmt(p[3])+"\n"+pUrl(p[4]))};
 const waOrder=i=>{const p=P[i];return"https://wa.me/79280040943?text="+encodeURIComponent("Здравствуйте! Хочу заказать:\n"+p[0]+(p[3]?" — "+fmt(p[3]):"")+"\n"+pUrl(p[4]))};
 function draw(){
   const tile=c=>`<button aria-pressed="${c===cat}" data-c="${esc(c)}"><span class="ico">${svg(c)}</span><span><b>${esc(c)}</b><small>${nOf(c)} ${word(nOf(c))}</small></span></button>`;
@@ -353,7 +374,7 @@ function draw(){
     <div class="body">
       <span class="cat">${esc(p.b!=="Другие"?p.b:p[1])}</span>
       <h3>${esc(p[0])}</h3>
-      <span class="price${p[3]?'':' ask'}">${p[3]?fmt(p[3]):"Цена по запросу"}</span>
+      <span class="price${p[3]?'':' ask'}">${p[3]?fmt(p[3]):"Цена по запросу"}</span>${rsOk(p)?`<span class="rs">Рассрочка <span class="nw">от ${fmt(rsM(p[3],12,40)).replace(" ₽","")} ₽/мес</span></span>`:""}
       <div class="acts"><a class="btn buy" href="${waOrder(P.indexOf(p))}" target="_blank" rel="noopener">Заказать</a><button class="cadd add" data-i="${P.indexOf(p)}" aria-label="Добавить в корзину" title="В корзину"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2.2l2.1 10.2a1.6 1.6 0 0 0 1.6 1.3h8.4a1.6 1.6 0 0 0 1.6-1.2L20.5 8H6.2"/><circle cx="9.5" cy="19.5" r="1.3"/><circle cx="17" cy="19.5" r="1.3"/><path d="M13 9.5v4M11 11.5h4"/></svg></button></div>
     </div>
   </article>`).join(""):'<p class="empty">Ничего не найдено. Напишите нам, подберём.</p>';
@@ -409,6 +430,7 @@ function openP(i,push){const p=P[i];if(!p)return;
   $("pvi").src=IMG[p[4]];$("pvi").alt=p[0];$("pvc").textContent=p.b!=="Другие"?p.b+" · "+p[1]:p[1];
   $("pvt").textContent=p[0];$("pvpr").textContent=p[3]?fmt(p[3]):"Цена по запросу";
   $("pvl").innerHTML=p[2].split(" · ").map(x=>`<li>${esc(x)}</li>`).join("");
+  const rb=$("pvrs");if(rsOk(p)){rb.hidden=false;rb.innerHTML=`<h4>Рассрочка через DIRHAM</h4><p>Без первого взноса, примерный расчёт:</p><table class="rst"><tr><th>Срок</th><th>В месяц</th><th>Наценка</th></tr>${RSN.map(([n,m])=>`<tr><td>${n} мес.</td><td>≈ ${fmt(rsM(p[3],n,m))}</td><td>${m}%</td></tr>`).join("")}</table><a class="rsbtn" href="${waRs(i)}" target="_blank" rel="noopener">Оформить в рассрочку</a><small>Со взносом наценка меньше: 9–30%. Точную сумму и одобрение даёт компания DIRHAM. <a href="https://dirham95.ru" target="_blank" rel="noopener">Калькулятор DIRHAM</a></small>`}else{rb.hidden=true;rb.innerHTML=""}
   $("pvadd").dataset.i=i;$("pvwa").href=waOrder(i);$("pvig").href=p[6]||"https://instagram.com/tehnoodom";$("pvig").querySelector("span").textContent=p[6]?"Смотреть обзор этого товара":"Смотреть обзоры в Instagram";
   pv.dataset.i=i;pv.classList.add("open");pv.setAttribute("aria-hidden","false");document.body.style.overflow="hidden";
   if(push!==false)try{history.replaceState(null,"","#p="+p[4])}catch(e){}
