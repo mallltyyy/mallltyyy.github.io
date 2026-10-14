@@ -192,6 +192,15 @@ html{color-scheme:dark}
 .rsbar{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin:26px auto 0;max-width:560px;padding:12px 18px;border:1px solid rgba(201,164,92,.45);border-radius:18px;background:rgba(201,164,92,.08);color:var(--ink)!important;font-size:15px;text-decoration:none;animation:rise .9s .3s cubic-bezier(.2,.7,.2,1) both}
 .pan .rsdown{display:flex;margin:0 0 10px;font-size:14px}.pan .rsdown input{width:130px;margin:0}.pan .rsb{margin-top:18px}
 @media (max-width:600px){.rsbar{margin:26px 16px 0}}
+.pva{grid-template-columns:1fr auto auto!important}
+.pvcall{width:50px;height:50px;border-radius:50%;border:1.5px solid var(--gold);color:var(--gold);display:flex;align-items:center;justify-content:center}.pvcall svg{width:22px;height:22px}
+.sim{margin-top:22px}.sim h4{margin:0 0 10px!important}
+.simr{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}.simr::-webkit-scrollbar{display:none}
+.simc{flex:0 0 132px;scroll-snap-align:start;display:flex;flex-direction:column;gap:4px;padding:0 0 10px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--bg);color:var(--ink);font:inherit;text-align:left;cursor:pointer}
+.simc img{width:100%;aspect-ratio:3/4;object-fit:cover;background:var(--frame,#111)}
+.simc span{font-size:12.5px;line-height:1.3;padding:0 9px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.6em}
+.simc b{font-size:14px;padding:0 9px}
+.card .cat{display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
 .rsbar b{color:var(--gold)}.rsbar span{color:var(--mute)}
 .resbar .rbtn button{padding:7px 12px}
 #shcat{background:var(--gold)!important;color:#17130b!important;font-weight:600}
@@ -224,7 +233,7 @@ html{color-scheme:dark}
     <a class="link" href="https://instagram.com/tehnoodom" target="_blank" rel="noopener">Обзоры в Instagram</a>
   </div>
   <a class="rsbar" href="rassrochka.html"><b>Исламская рассрочка</b><span>до 12 месяцев · со взносом и без · от 25 000 ₽</span></a>
-  <div class="trust"><span><b id="tc">17 товаров</b> в наличии</span><span><b>Доставка</b> по России</span><span><b>Грозный</b>, ул. Назарбаева 98</span></div>
+  <div class="trust"><span><b id="tc">17 товаров</b> в каталоге</span><span><b>Доставка</b> по России</span><span><b>Грозный</b>, ул. Назарбаева 98</span></div>
 </section>
 
 <section class="wrap" id="catalog">
@@ -311,13 +320,13 @@ html{color-scheme:dark}
     <span class="cat" id="pvc"></span>
     <h2 id="pvt"></h2>
     <div class="pvprice" id="pvpr"></div>
-    <span class="stock">В наличии</span>
     <h4>Характеристики</h4>
     <ul class="pvl" id="pvl"></ul>
-    <div class="pva"><a class="btn lg wa" id="pvwa" target="_blank" rel="noopener">Заказать</a><button class="btn lg add sec" id="pvadd">В корзину</button></div>
+    <div class="pva"><a class="btn lg wa" id="pvwa" target="_blank" rel="noopener">Заказать</a><button class="btn lg add sec" id="pvadd">В корзину</button><a class="pvcall" href="tel:+79280040943" aria-label="Позвонить" title="Позвонить"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></a></div>
     <div class="rsb" id="pvrs" hidden></div>
     <a class="pvig" id="pvig" href="https://instagram.com/tehnoodom" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/></svg><span>Смотреть обзоры в Instagram</span></a>
     <button class="pvsh" id="pvsh">Поделиться товаром</button>
+    <div class="sim" id="pvsim" hidden><h4>Похожие товары</h4><div class="simr" id="pvsimr"></div></div>
   </div>
 </div></div>
 <div class="ov" id="ov"><div class="pan" role="dialog" aria-label="Корзина">
@@ -358,6 +367,12 @@ const BR=["MXMID","Nokia","Fitbit","OLAX","Hitachi","Бирюса","ATLANT","CEN
 const BRN={"Fitbit":"Google Fitbit","OLAX":"Olax","ATLANT":"Atlant","CENTEK":"Centek","ITIMAT":"Itimat","CRONIER":"Cronier","KING":"King","SOKANY":"Sokany","PROLISS":"Proliss","DEESPI":"Deespi","REMAX":"Remax"};
 const brandOf=n=>{for(const b of BR){if(new RegExp("(^|[^A-Za-z])"+b+"(?![A-Za-z])","i").test(n))return BRN[b]||b}return"Другие"};
 P.forEach(p=>p.b=brandOf(p[0]));
+const splitName=n=>{for(const b of BR){const m=new RegExp("(^|[^A-Za-z])("+b+")(?![A-Za-z])","i").exec(n);if(m){const k=m.index+m[1].length;if(k>0)return[n.slice(0,k).trim(),n.slice(k)]}}return["",n]};
+const nbh=t=>t.replace(/([A-Za-z0-9])-([A-Za-z0-9])/g,"$1\u2011$2");const norm=t=>t.toLowerCase().replace(/ё/g,"е");const cmp=t=>t.replace(/[\s\-‑.,·/()]/g,"");
+P.forEach(p=>{p.h=norm(p[0]+" "+p[1]+" "+p[2]+" "+p.b);p.hc=cmp(p.h)});
+const SYN=[["стирал",["стиральн"]],["стиралк",["стиральн"]],["холодос",["холодильн","морозильн"]],["холодил",["холодильн","морозильн"]],["морозил",["морозильн"]],["пылик",["пылесос"]],["пылесос",["пылесос"]],["микров",["микроволнов"]],["микра",["микроволнов"]],["свч",["микроволнов"]],["мобил",["телефон"]],["телеф",["телефон"]],["наушн",["наушник"]],["уши",["наушник"]],["airpod",["наушник"]],["эирпод",["наушник"]],["повер",["повербанк"]],["павер",["повербанк"]],["пауэр",["повербанк"]],["плит",["плит","варочн"]],["духовк",["духов"]],["кофевар",["кофе"]],["кофемаш",["кофе"]],["аэрофрит",["аэрогрил"]],["фритюр",["аэрогрил"]],["обогрев",["обогрев"]],["увлажн",["увлажн"]],["стрижк",["стрижк"]],["машинк",["машинк"]],["роутер",["роутер","модем"]],["модем",["роутер","модем"]],["симк",["sim"]],["лж",["lg"]],["элджи",["lg"]],["самсунг",["samsung"]],["дайсон",["dyson"]],["бош",["bosch"]],["миле",["miele"]],["тефаль",["tefal"]],["браун",["braun"]],["роборок",["roborock"]],["дриме",["dreame"]],["хоко",["hoco"]],["ремакс",["remax"]],["кинг",["king"]],["мидеа",["midea"]],["мидея",["midea"]],["атлант",["atlant"]],["индезит",["indesit"]],["хитачи",["hitachi"]],["беко",["beko"]],["горенье",["gorenje"]],["хендай",["hyundai"]],["хюндай",["hyundai"]],["нокиа",["nokia"]],["нокия",["nokia"]],["бирюс",["бирюс"]],["центек",["centek"]],["соканий",["sokany"]],["сокани",["sokany"]],["кроньер",["cronier"]],["олакс",["olax"]],["фитбит",["fitbit"]],["вайфай",["wi‑fi","wi-fi","wifi"]]];
+const tokOk=(p,t)=>{if(p.h.includes(t)||p.hc.includes(cmp(t)))return true;for(const[k,v]of SYN)if(t.startsWith(k)&&v.some(x=>p.h.includes(x)))return true;return false};
+const match=(p,q)=>!q||norm(q).split(/\s+/).filter(Boolean).every(t=>tokOk(p,t));
 const seg=document.getElementById("seg"),grid=document.getElementById("grid");
 const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const fmt=n=>n.toLocaleString("ru-RU").replace(/\u00a0/g," ")+" ₽";
@@ -368,7 +383,7 @@ function draw(){
   const tile=c=>`<button aria-pressed="${c===cat}" data-c="${esc(c)}"><span class="ico">${svg(c)}</span><span><b>${esc(c)}</b><small>${nOf(c)} ${word(nOf(c))}</small></span></button>`;
   const inG=new Set(GROUPS.flatMap(g=>g[1]));
   seg.innerHTML=tile("Все")+GROUPS.map(([g,cs])=>{const l=cs.filter(c=>present.has(c));return l.length?`<div class="cgh">${esc(g)}</div>`+l.map(tile).join(""):""}).join("")+[...present].filter(c=>!inG.has(c)).map(tile).join("");
-  const base=P.filter(p=>(cat==="Все"||p[1]===cat)&&(p[0]+p[2]).toLowerCase().includes(q));
+  const base=P.filter(p=>(cat==="Все"||p[1]===cat)&&match(p,q));
   const bc={};base.forEach(p=>bc[p.b]=(bc[p.b]||0)+1);
   const bl=Object.keys(bc).sort((a,b)=>a==="Другие"?1:b==="Другие"?-1:a.localeCompare(b));
   if(brand!=="Все"&&!bc[brand])brand="Все";
@@ -383,8 +398,8 @@ function draw(){
   <article class="card" data-i="${P.indexOf(p)}" tabindex="0" aria-label="${esc(p[0])}">
     <div class="photo"><img class="hq" src="${IMG[p[4]]}" alt="${esc(p[0])}" loading="${k<6?'eager':'lazy'}"></div>
     <div class="body">
-      <span class="cat">${esc(p.b!=="Другие"?p.b:p[1])}</span>
-      <h3>${esc(p[0])}</h3>
+      ${(([t,m])=>`<span class="cat">${esc(t||p[1])}</span>
+      <h3>${esc(nbh(m))}</h3>`)(splitName(p[0]))}
       <span class="price${p[3]?'':' ask'}">${p[3]?fmt(p[3]):"Цена по запросу"}</span>${rsOk(p)?`<span class="rs">Рассрочка <span class="nw">от ${fmt(RS.from(p[3])).replace(" ₽","")} ₽/мес</span></span>`:""}
       <div class="acts"><a class="btn buy" href="${waOrder(P.indexOf(p))}" target="_blank" rel="noopener">Заказать</a><button class="cadd add" data-i="${P.indexOf(p)}" aria-label="Добавить в корзину" title="В корзину"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2.2l2.1 10.2a1.6 1.6 0 0 0 1.6 1.3h8.4a1.6 1.6 0 0 0 1.6-1.2L20.5 8H6.2"/><circle cx="9.5" cy="19.5" r="1.3"/><circle cx="17" cy="19.5" r="1.3"/><path d="M13 9.5v4M11 11.5h4"/></svg></button></div>
     </div>
@@ -444,10 +459,12 @@ const pv=$("pv");
 const tt=$("totop");addEventListener("scroll",()=>tt.classList.toggle("show",scrollY>1200),{passive:true});tt.onclick=()=>scrollTo({top:document.getElementById("catalog").offsetTop-60,behavior:"smooth"});
 function openP(i,push){const p=P[i];if(!p)return;
   $("pvi").src=IMG[p[4]];$("pvi").alt=p[0];$("pvc").textContent=p.b!=="Другие"?p.b+" · "+p[1]:p[1];
-  $("pvt").textContent=p[0];$("pvpr").textContent=p[3]?fmt(p[3]):"Цена по запросу";
+  $("pvt").textContent=nbh(p[0]);$("pvpr").textContent=p[3]?fmt(p[3]):"Цена по запросу";
   $("pvl").innerHTML=p[2].split(" · ").map(x=>`<li>${esc(x)}</li>`).join("");
   const rb=$("pvrs");if(rsOk(p)){rb.hidden=false;rb.innerHTML='<h4>Рассрочка<small>Исламская, через DIRHAM · 3–12 месяцев</small></h4><div></div>';
     RS.mount(rb.lastChild,{price:p[3],getText:st=>"Здравствуйте! Хочу оформить в рассрочку:\n"+p[0]+" — "+fmt(p[3])+"\n"+pUrl(p[4])+"\n\n"+st.line})}else{rb.hidden=true;rb.innerHTML=""}
+  const sim=P.map((x,k)=>[x,k]).filter(([x,k])=>k!==+i&&x[1]===p[1]).sort((a,b)=>Math.abs(a[0][3]-p[3])-Math.abs(b[0][3]-p[3])).slice(0,8);
+  $("pvsim").hidden=!sim.length;$("pvsimr").innerHTML=sim.map(([x,k])=>`<button class="simc" data-i="${k}"><img src="${IMG[x[4]]}" alt="" loading="lazy"><span>${esc(splitName(x[0])[1])}</span><b>${x[3]?fmt(x[3]):"Цена по запросу"}</b></button>`).join("");$("pvsimr").scrollLeft=0;
   $("pvadd").dataset.i=i;$("pvwa").href=waOrder(i);$("pvig").href=p[6]||"https://instagram.com/tehnoodom";$("pvig").querySelector("span").textContent=p[6]?"Смотреть обзор этого товара":"Смотреть обзоры в Instagram";
   pv.dataset.i=i;pv.classList.add("open");pv.setAttribute("aria-hidden","false");document.body.style.overflow="hidden";
   if(push!==false)try{history.replaceState(null,"","#p="+p[4])}catch(e){}
@@ -455,6 +472,7 @@ function openP(i,push){const p=P[i];if(!p)return;
 function closeP(){pv.classList.remove("open");pv.setAttribute("aria-hidden","true");document.body.style.overflow="";setCatHash()}
 grid.addEventListener("click",e=>{if(e.target.closest(".add,.buy"))return;const c=e.target.closest(".card");if(c)openP(+c.dataset.i)});
 grid.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.classList.contains("card"))openP(+e.target.dataset.i)});
+$("pvsimr").addEventListener("click",e=>{const c=e.target.closest(".simc");if(c)openP(+c.dataset.i)});
 $("pvx").onclick=closeP;pv.addEventListener("click",e=>{if(e.target===pv)closeP()});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&pv.classList.contains("open"))closeP()});
 $("pvadd").onclick=()=>{const i=$("pvadd").dataset.i;cart[i]=(cart[i]||0)+1;drawCart();$("pvadd").textContent="Добавлено ✓";setTimeout(()=>$("pvadd").textContent="В корзину",1200)};
