@@ -4,10 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>TEHNOODOM — техника и товары для дома</title>
-<meta name="description" content="Кухонная техника, пылесосы, фонари и машинки для стрижки. Доставка по России. Заказ через WhatsApp.">
+<meta name="description" content="Каталог магазина TEHNOODOM: холодильники, стиральные машины, плиты, пылесосы, мелкая техника и гаджеты. Грозный, ул. Назарбаева 98. Заказ в WhatsApp.">
 <meta property="og:title" content="TEHNOODOM — техника и товары для дома">
-<meta property="og:description" content="Кухонная техника, пылесосы, фонари и машинки для стрижки. Грозный, ул. Назарбаева 98. Заказ в WhatsApp.">
+<meta property="og:description" content="Холодильники, стиральные машины, плиты, пылесосы, мелкая техника и гаджеты. Грозный, ул. Назарбаева 98. Заказ в WhatsApp.">
 <meta property="og:type" content="website">
+<meta property="og:image" content="https://tehnoodom.github.io/og/main.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="og:url" content="https://tehnoodom.github.io/">
 <meta property="og:locale" content="ru_RU">
 <meta name="theme-color" content="#0b0b0c">
@@ -327,7 +330,8 @@ P.forEach(p=>p.b=brandOf(p[0]));
 const seg=document.getElementById("seg"),grid=document.getElementById("grid");
 const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const fmt=n=>n.toLocaleString("ru-RU").replace(/\u00a0/g," ")+" ₽";
-const waOrder=i=>{const p=P[i];return"https://wa.me/79280040943?text="+encodeURIComponent("Здравствуйте! Хочу заказать:\n"+p[0]+(p[3]?" — "+fmt(p[3]):"")+"\n"+location.origin+location.pathname+"#p="+p[4])};
+const SITE="https://tehnoodom.github.io/";const pUrl=k=>SITE+"p/"+k+".html";const cUrl=c=>SITE+"c/"+slug(c)+".html";
+const waOrder=i=>{const p=P[i];return"https://wa.me/79280040943?text="+encodeURIComponent("Здравствуйте! Хочу заказать:\n"+p[0]+(p[3]?" — "+fmt(p[3]):"")+"\n"+pUrl(p[4]))};
 function draw(){
   const tile=c=>`<button aria-pressed="${c===cat}" data-c="${esc(c)}"><span class="ico">${svg(c)}</span><span><b>${esc(c)}</b><small>${nOf(c)} ${word(nOf(c))}</small></span></button>`;
   const inG=new Set(GROUPS.flatMap(g=>g[1]));
@@ -356,7 +360,7 @@ function draw(){
 }
 seg.addEventListener("click",e=>{const b=e.target.closest("button");if(b){cat=b.dataset.c;setCatHash();draw();document.getElementById("res").scrollIntoView({behavior:"smooth",block:"start"})}});
 document.getElementById("res").addEventListener("click",async e=>{if(e.target.id==="reset"){cat="Все";q="";brand="Все";document.getElementById("q").value="";setCatHash();draw()}
-  if(e.target.id==="shcat"){const b=e.target,url=location.origin+catUrl();
+  if(e.target.id==="shcat"){const b=e.target,url=cUrl(cat);
     try{if(navigator.share){await navigator.share({title:cat+" — TEHNOODOM",url});return}}catch(er){return}
     try{await navigator.clipboard.writeText(url);b.textContent="Скопировано ✓";setTimeout(()=>b.textContent="Ссылка на раздел",1500)}catch(er){prompt("Ссылка на раздел:",url)}}});
 document.getElementById("q").addEventListener("input",e=>{q=e.target.value.trim().toLowerCase();draw()});
@@ -415,7 +419,7 @@ grid.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.classList.conta
 $("pvx").onclick=closeP;pv.addEventListener("click",e=>{if(e.target===pv)closeP()});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&pv.classList.contains("open"))closeP()});
 $("pvadd").onclick=()=>{const i=$("pvadd").dataset.i;cart[i]=(cart[i]||0)+1;drawCart();$("pvadd").textContent="Добавлено ✓";setTimeout(()=>$("pvadd").textContent="В корзину",1200)};
-$("pvsh").onclick=async()=>{const p=P[pv.dataset.i];const url=location.origin+location.pathname+"#p="+p[4];
+$("pvsh").onclick=async()=>{const p=P[pv.dataset.i];const url=pUrl(p[4]);
   try{if(navigator.share){await navigator.share({title:p[0],text:p[0]+" — "+(p[3]?fmt(p[3]):""),url});return}}catch(e){return}
   try{await navigator.clipboard.writeText(url);$("pvsh").textContent="Ссылка скопирована ✓";setTimeout(()=>$("pvsh").textContent="Поделиться товаром",1500)}catch(e){prompt("Ссылка на товар:",url)}};
 (function(){const m=location.hash.match(/^#p=(.+)$/);if(m){const i=P.findIndex(p=>p[4]===decodeURIComponent(m[1]));if(i>=0)openP(i,false)}})();
