@@ -176,12 +176,17 @@ html{color-scheme:dark}
 .cats button{min-height:48px;padding:8px 10px}
 .cats button small{font-size:11.5px;margin-top:1px}
 .cats button[data-c="Все"]{grid-column:1/-1}
+.igbtn{display:inline-grid;place-items:center;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);color:var(--ink);margin-right:8px;flex:none}
+.igbtn svg{width:20px;height:20px}
+.pvig{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:10px;padding:12px;border-radius:980px;background:linear-gradient(90deg,#833ab4,#e1306c,#f77737);color:#fff!important;font-size:15px;font-weight:600;text-decoration:none}
+.pvig svg{width:20px;height:20px}
 </style>
 </head>
 <body>
 <nav><div class="wrap">
   <a class="brand" href="#top"><img src="data:image/jpeg;base64,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" alt="">TEHNOODOM</a>
   <div class="links"><a href="#catalog">Каталог</a><a href="#how">Как заказать</a><a href="#info">Доставка и гарантия</a><a href="#contacts">Контакты</a></div>
+  <a class="igbtn" href="https://instagram.com/tehnoodom" target="_blank" rel="noopener" aria-label="Обзоры в Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/></svg></a>
   <a class="btn" href="#catalog">Каталог</a>
 </div></nav>
 
@@ -193,6 +198,7 @@ html{color-scheme:dark}
     <a class="btn lg" href="#catalog">Выбрать товар</a>
     <a class="link" href="https://wa.me/79280040943" target="_blank" rel="noopener">Написать в WhatsApp</a>
     <a class="link" href="tel:+79280040943">Позвонить</a>
+    <a class="link" href="https://instagram.com/tehnoodom" target="_blank" rel="noopener">Обзоры в Instagram</a>
   </div>
   <div class="trust"><span><b id="tc">17 товаров</b> в наличии</span><span><b>Доставка</b> по России</span><span><b>Грозный</b>, ул. Назарбаева 98</span></div>
 </section>
@@ -278,6 +284,7 @@ html{color-scheme:dark}
     <h4>Характеристики</h4>
     <ul class="pvl" id="pvl"></ul>
     <div class="pva"><a class="btn lg wa" id="pvwa" target="_blank" rel="noopener">Заказать</a><button class="btn lg add sec" id="pvadd">В корзину</button></div>
+    <a class="pvig" id="pvig" href="https://instagram.com/tehnoodom" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/></svg><span>Смотреть обзоры в Instagram</span></a>
     <button class="pvsh" id="pvsh">Поделиться товаром</button>
   </div>
 </div></div>
@@ -398,7 +405,7 @@ function openP(i,push){const p=P[i];if(!p)return;
   $("pvi").src=IMG[p[4]];$("pvi").alt=p[0];$("pvc").textContent=p.b!=="Другие"?p.b+" · "+p[1]:p[1];
   $("pvt").textContent=p[0];$("pvpr").textContent=p[3]?fmt(p[3]):"Цена по запросу";
   $("pvl").innerHTML=p[2].split(" · ").map(x=>`<li>${esc(x)}</li>`).join("");
-  $("pvadd").dataset.i=i;$("pvwa").href=waOrder(i);
+  $("pvadd").dataset.i=i;$("pvwa").href=waOrder(i);$("pvig").href=p[6]||"https://instagram.com/tehnoodom";$("pvig").querySelector("span").textContent=p[6]?"Смотреть обзор этого товара":"Смотреть обзоры в Instagram";
   pv.dataset.i=i;pv.classList.add("open");pv.setAttribute("aria-hidden","false");document.body.style.overflow="hidden";
   if(push!==false)try{history.replaceState(null,"","#p="+p[4])}catch(e){}
   $("pvx").focus({preventScroll:true});pv.querySelector(".pvp").scrollTop=0}
