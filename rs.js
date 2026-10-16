@@ -19,13 +19,13 @@ var RS = {
   mount: function (el, opts) {
     var st = { n: 12, dn: false, down: RS.autoDown(opts.price), price: opts.price };
     function body() {
-      var pr = st.price, d = st.dn ? st.down : 0;
-      return RS.N.map(function (n) {
-        var m = (st.dn ? RS.M1 : RS.M0)[n];
+      var pr = st.price, d = st.dn ? st.down : 0, T = d > 0 ? RS.M1 : RS.M0;
+      return (st.dn && !d ? '<small style="display:block;font-size:13px;color:#e8a33c;margin:0 2px 4px">Укажите сумму первого взноса. Пока показан расчёт без взноса.</small>' : '') + RS.N.map(function (n) {
+        var m = T[n];
         return '<button type="button" class="rsrow' + (n === st.n ? ' on' : '') + '" data-n="' + n + '"><span>' + n + ' мес.</span><b>≈ ' + RS.fmt(RS.month(pr, n, d)) + '<small>/мес</small></b><em>+' + m + '%</em></button>';
       }).join("") +
-        '<div class="rssum">Итого к оплате: <b>≈ ' + RS.fmt(RS.month(pr, st.n, d) * st.n + d) + '</b>' + (d ? '<br>взнос ' + RS.fmt(d) + ' + ' + st.n + ' × ' + RS.fmt(RS.month(pr, st.n, d)) : '') + '</div>' +
-        '<a class="rsbtn" target="_blank" rel="noopener" href="' + RS.WA + encodeURIComponent(opts.getText(RS.state(st))) + '">' + (opts.btn || 'Оформить в рассрочку') + '</a>';
+        '<div class="rssum">Итого за ' + st.n + ' мес.: <b>≈ ' + RS.fmt(RS.month(pr, st.n, d) * st.n + d) + '</b>' + (d ? '<br>взнос ' + RS.fmt(d) + ' + ' + st.n + ' × ' + RS.fmt(RS.month(pr, st.n, d)) : '') + '</div>' +
+        '<a class="rsbtn" target="_blank" rel="noopener" href="' + RS.WA + encodeURIComponent(opts.getText(RS.state(st))) + '">' + (opts.btn || 'Оформить в рассрочку') + '</a><small style="display:block;text-align:center;font-size:12.5px;color:#a19d95;margin-top:6px">Откроется WhatsApp с готовой заявкой</small>';
     }
     function draw() {
       el.innerHTML =

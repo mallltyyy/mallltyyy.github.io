@@ -276,6 +276,20 @@ html{color-scheme:dark}
 .pvig{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:10px;padding:12px;border-radius:980px;background:linear-gradient(90deg,#833ab4,#e1306c,#f77737);color:#fff!important;font-size:15px;font-weight:600;text-decoration:none}
 .pvig svg{width:20px;height:20px}
 .fh{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);margin-bottom:10px}.fcats{display:flex;flex-wrap:wrap;gap:6px 14px;margin-bottom:16px;font-size:14px}.fcats a{color:var(--mute);text-decoration:none}.fcats a:hover{color:var(--ink)}
+/* v4: по записи экрана iPhone */
+.sel{position:relative;padding:0}.sel span{position:absolute;left:12px;top:7px;pointer-events:none;font-size:12px}
+.sel select{font-size:16px;min-height:54px;padding:22px 30px 7px 12px;background-position:right 12px center}
+@media (max-width:699px){body.srching #seg{display:none!important}.srch{scroll-margin-top:64px}}
+body.kb .bnav{display:none}
+.empty{display:block;grid-column:1/-1;text-align:center;color:var(--mute);padding:36px 12px}.empty b{color:var(--ink);font-size:17px}.empty p+p{margin-top:6px}
+.ebtns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:16px}
+.ebtns button{border:1px solid var(--line);background:transparent;color:var(--ink);font:inherit;font-size:15px;padding:11px 18px;border-radius:980px;cursor:pointer}
+.ebtns .btn{padding:11px 18px;margin:0;display:inline-flex;align-items:center;min-height:46px}.ebtns button{min-height:46px}
+.nexthint{font-size:13px;color:var(--mute);text-align:center;margin-top:8px}
+.pvig{background:transparent;border:1px solid var(--line);color:var(--ink)!important;font-weight:500}
+.row .link{display:inline-block;padding:9px 10px}
+.cats button small{font-size:12.5px}.card .cat{font-size:12px}.card .rs{font-size:13px}
+#shcat{background:rgba(120,120,128,.14)!important;color:var(--mute)!important;font-weight:500}
 </style>
 </head>
 <body>
@@ -432,6 +446,7 @@ html{color-scheme:dark}
   <label for="cm">Комментарий (по желанию)</label><input type="text" id="cm">
   <p class="err" id="err">Укажите адрес доставки.</p>
   <button class="btn lg" id="send">Отправить заказ в WhatsApp</button>
+<p class="nexthint">Откроется WhatsApp с готовым сообщением — останется нажать «Отправить».</p>
   <div class="rsb" id="cartrs" hidden><h4>Или в рассрочку<small>Исламская, через DIRHAM · на заказ от 25 000 ₽</small></h4><div id="cartrsw"></div></div>
 </div></div>
 
@@ -480,6 +495,7 @@ document.addEventListener("error",e=>{const t=e.target;if(t.tagName!=="IMG")retu
 const rsOk=p=>p[3]>=RS.MIN;
 const waOrder=i=>{const p=P[i];return"https://wa.me/79280040943?text="+encodeURIComponent("Здравствуйте! Хочу заказать:\n"+p[0]+(p[3]?" — "+fmt(p[3]):"")+"\n"+pUrl(p[4]))};
 function draw(){
+  document.body.classList.toggle("srching",!!q);
   const tile=c=>`<button aria-pressed="${c===cat}" data-c="${esc(c)}"><span class="ico">${svg(c)}</span><span><b>${esc(c)}</b><small>${nOf(c)} ${word(nOf(c))}</small></span></button>`;
   const inG=new Set(GROUPS.flatMap(g=>g[1]));
   seg.innerHTML=tile("Все")+GROUPS.map(([g,cs])=>{const l=cs.filter(c=>present.has(c));return l.length?`<div class="cgh">${esc(g)}</div>`+l.map(tile).join(""):""}).join("")+[...present].filter(c=>!inG.has(c)).map(tile).join("");
@@ -493,7 +509,7 @@ function draw(){
   if(sort)list=list.slice().sort((a,b)=>sort==="asc"?a[3]-b[3]:b[3]-a[3]);
   else if(cat==="Все"){const oi=c=>{const k=ORDER.indexOf(c);return k<0?999:k};list=list.map((p,k)=>[p,k]).sort((a,b)=>oi(a[0][1])-oi(b[0][1])||a[1]-b[1]).map(x=>x[0])}
   const res=document.getElementById("res");
-  res.innerHTML=(cat==="Все"&&!q&&brand==="Все")?`<span>Все товары: <b>${list.length}</b></span>`:`<span>${cat!=="Все"?`<b>${esc(cat)}</b>${brand!=="Все"?" · "+esc(brand):""}: `:brand!=="Все"?`<b>${esc(brand)}</b>: `:""}${list.length} ${word(list.length)}</span><span class="rbtn">${cat!=="Все"?'<button id="shcat">Ссылка на раздел</button>':''}<button id="reset">✕ Все</button></span>`;
+  res.innerHTML=(cat==="Все"&&!q&&brand==="Все")?`<span>Все товары: <b>${list.length}</b></span>`:`<span>${q?`«<b>${esc(q)}</b>»${brand!=="Все"?" · "+esc(brand):""}: `:cat!=="Все"?`<b>${esc(cat)}</b>${brand!=="Все"?" · "+esc(brand):""}: `:brand!=="Все"?`<b>${esc(brand)}</b>: `:""}${list.length} ${word(list.length)}</span><span class="rbtn">${cat!=="Все"?'<button id="shcat">Ссылка на раздел</button>':''}<button id="reset">✕ Сбросить</button></span>`;
   const total=list.length;list=list.slice(0,lim);
   const mb=document.getElementById("morebox");mb.innerHTML=total>lim?`<button class="more" id="more">Показать ещё ${Math.min(PAGE,total-lim)} <small>из ${total-lim}</small></button>`:"";
   const on=seg.querySelector('[aria-pressed="true"]');if(on&&matchMedia("(max-width:699px)").matches)seg.scrollLeft=Math.max(0,on.offsetLeft-16);
@@ -506,14 +522,18 @@ function draw(){
       <span class="price${p[3]?'':' ask'}">${p[3]?fmt(p[3]):"Цена по запросу"}</span>${rsOk(p)?`<span class="rs">Рассрочка <span class="nw">от ${fmt(RS.from(p[3])).replace(" ₽","")} ₽/мес</span></span>`:""}
       <div class="acts"><a class="btn buy" href="${waOrder(P.indexOf(p))}" target="_blank" rel="noopener">Заказать</a><button class="cadd add" data-i="${P.indexOf(p)}" aria-label="Добавить в корзину" title="В корзину"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2.2l2.1 10.2a1.6 1.6 0 0 0 1.6 1.3h8.4a1.6 1.6 0 0 0 1.6-1.2L20.5 8H6.2"/><circle cx="9.5" cy="19.5" r="1.3"/><circle cx="17" cy="19.5" r="1.3"/><path d="M13 9.5v4M11 11.5h4"/></svg></button></div>
     </div>
-  </article>`).join(""):'<p class="empty">Ничего не найдено. Напишите нам, подберём.</p>';
+  </article>`).join(""):`<div class="empty"><p><b>${q?`По запросу «${esc(q)}» ничего не найдено`:"Ничего не найдено"}</b></p><p>Проверьте написание или напишите нам — подберём и привезём.</p><div class="ebtns"><button type="button" id="reset2">Сбросить поиск</button><a class="btn" href="https://wa.me/79280040943?text=${encodeURIComponent("Здравствуйте! Ищу: "+(q||"технику")+". Есть в наличии?")}" target="_blank" rel="noopener">Спросить в WhatsApp</a></div></div>`;
 }
 seg.addEventListener("click",e=>{const b=e.target.closest("button");if(b){cat=b.dataset.c;lim=PAGE;setCatHash();draw();document.getElementById("res").scrollIntoView({behavior:"smooth",block:"start"})}});
 document.getElementById("res").addEventListener("click",async e=>{if(e.target.id==="reset"){cat="Все";lim=PAGE;q="";brand="Все";document.getElementById("q").value="";setCatHash();draw()}
   if(e.target.id==="shcat"){const b=e.target,url=cUrl(cat);
     try{if(navigator.share){await navigator.share({title:cat+" — TEHNOODOM",url});return}}catch(er){return}
     try{await navigator.clipboard.writeText(url);b.textContent="Скопировано ✓";setTimeout(()=>b.textContent="Ссылка на раздел",1500)}catch(er){prompt("Ссылка на раздел:",url)}}});
-document.getElementById("q").addEventListener("input",e=>{q=e.target.value.trim().toLowerCase();lim=PAGE;draw()});
+document.getElementById("q").addEventListener("input",e=>{q=e.target.value.trim().toLowerCase();if(q&&cat!=="Все"){cat="Все";setCatHash()}lim=PAGE;draw()});
+document.getElementById("q").addEventListener("focus",e=>{if(matchMedia("(max-width:699px)").matches)setTimeout(()=>e.target.closest(".srch").scrollIntoView({block:"start",behavior:"smooth"}),300)});
+grid.addEventListener("click",e=>{if(e.target.id==="reset2"){const r=document.getElementById("reset");if(r)r.click()}});
+document.addEventListener("focusin",e=>{if(e.target.matches("input:not([type=radio]):not([type=checkbox]),textarea,select"))document.body.classList.add("kb")});
+document.addEventListener("focusout",()=>document.body.classList.remove("kb"));
 document.getElementById("morebox").addEventListener("click",e=>{if(e.target.closest("#more")){lim+=PAGE;draw()}});
 document.getElementById("brand").addEventListener("change",e=>{brand=e.target.value;lim=PAGE;draw()});
 document.getElementById("sort").addEventListener("change",e=>{sort=e.target.value;lim=PAGE;draw()});
