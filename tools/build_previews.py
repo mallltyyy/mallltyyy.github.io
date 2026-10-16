@@ -15,6 +15,14 @@ t=open('index.html',encoding='utf-8').read().split('\n')
 get=lambda pre,off: json.loads(next(l for l in t if l.startswith(pre))[off:].rstrip(';'))
 P=get('const P=',8); IMG=get('const IMG=',10); ORDER=get('const ORDER=',12)
 for d in ('p','c','og'): os.makedirs(d,exist_ok=True)
+# уменьшенные фото для сетки каталога (t/), полные остаются для карточки товара
+os.makedirs('t',exist_ok=True)
+for _f in set(IMG.values()):
+    _o='t/'+_f
+    if os.path.exists(_f) and (not os.path.exists(_o) or os.path.getmtime(_o)<os.path.getmtime(_f)):
+        _im=Image.open(_f).convert('RGB'); _im.thumbnail((480,960),Image.LANCZOS); _im.save(_o,'WEBP',quality=74,method=6)
+for _f in os.listdir('t'):
+    if _f not in set(IMG.values()): os.remove('t/'+_f)
 def og_img(key,src):
     out=f'og/{key}.jpg'
     if not os.path.exists(out) or os.path.getmtime(out)<os.path.getmtime(src):
@@ -94,7 +102,7 @@ e=lambda s: html.escape(s,quote=True)
 groups={}
 for p in items: groups.setdefault(p[1],[]).append(p)
 cards=''.join(f'<h3 class="gh">{e(c)}</h3><div class="grid">'+''.join(
-    f'<a class="card" href="./#p={p[4]}"><img src="{IMG[p[4]]}" alt="{e(p[0])}" loading="lazy"><span class="nm">{e(p[0])}</span><b>{fmt(p[3])}</b><span class="mo" data-p="{p[3]}"></span></a>'
+    f'<a class="card" href="./#p={p[4]}"><img src="t/{IMG[p[4]]}" alt="{e(p[0])}" loading="lazy"><span class="nm">{e(p[0])}</span><b>{fmt(p[3])}</b><span class="mo" data-p="{p[3]}"></span></a>'
     for p in ps)+'</div>' for c,ps in groups.items())
 lo=min(p[3] for p in items)
 open('rassrochka.html','w',encoding='utf-8').write(f'''<!doctype html>
