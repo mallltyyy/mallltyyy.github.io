@@ -42,21 +42,10 @@ def page(path,title,desc,img,target):
 <script>location.replace("../{target}")</script>
 <style>body{{background:#0b0b0c;color:#f3f1ec;font-family:system-ui,sans-serif;display:grid;place-items:center;min-height:100vh;margin:0}}a{{color:#c9a45c}}</style>
 </head><body><p>Открываем <a href="../{target}">{e(title)}</a>…</p></body></html>''')
-keep=set()
-for p in P:
-    name,cat,spec,price,key=p[:5]
-    img=og_img(key,IMG[key])
-    desc=spec+' · заказ в WhatsApp · TEHNOODOM, Грозный'
-    if len(desc)>200: desc=desc[:197].rsplit(' ',1)[0]+'…'
-    page(f'p/{key}.html',name+(' — '+fmt(price) if price else ''),desc,img,f'#p={key}'); keep.add(f'p/{key}.html')
+import seo_pages
+keep=seo_pages.build(P,IMG,ORDER,og_img,slug,fmt,word)
 cats={}
 for p in P: cats.setdefault(p[1],[]).append(p)
-for c,items in cats.items():
-    s=slug(c); n=len(items)
-    lo=min(x[3] for x in items if x[3]) if any(x[3] for x in items) else 0
-    desc=f'{n} {word(n)}'+(f' · от {fmt(lo)}' if lo else '')+' · заказ в WhatsApp · TEHNOODOM, Грозный'
-    first=sorted(items,key=lambda x:-x[3])[0]
-    page(f'c/{s}.html',f'{c} — TEHNOODOM',desc,BASE+f'og/{first[4]}.jpg',f'#c={s}'); keep.add(f'c/{s}.html')
 # удалить устаревшие
 for d in ('p','c'):
     for f in os.listdir(d):
