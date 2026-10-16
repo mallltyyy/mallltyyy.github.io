@@ -163,6 +163,7 @@ def build(P, IMG, ORDER, og_img, slug, fmt, word):
         sim = sorted([x for x in cats[cat] if x[4] != key], key=lambda x: abs(x[3] - price))[:8]
         simh = (f'<section class="sec"><h2>Похожие товары</h2><div class="grid">{"".join(card(x) for x in sim)}</div></section>'
                 if sim else '')
+        vid = (f'<a class="btn out" href="{e(p[6])}" target="_blank" rel="noopener">Смотреть видеообзор</a>' if len(p) > 6 and p[6] else '')
         body = f'''<main class="wrap">
 <ol class="bc"><li><a href="../">Каталог</a></li><li><a href="../c/{cs}.html">{e(cat)}</a></li><li aria-current="page">{e(b or name[:40])}</li></ol>
 <article class="pp">
@@ -174,6 +175,7 @@ def build(P, IMG, ORDER, og_img, slug, fmt, word):
 {rs}
 <div class="btns">
 <a class="btn wa buy" href="{wa}" target="_blank" rel="noopener">{ICON_WA}Заказать в WhatsApp</a>
+{vid}
 <div class="row2"><a class="btn gold add" href="../#add={key}">{ICON_CART}В корзину</a><a class="btn out" href="tel:{PHONE}">Позвонить</a></div>
 </div>
 <section class="box"><h2>Характеристики</h2><ul>{"".join(f"<li>{e(x)}</li>" for x in specs)}</ul></section>
