@@ -304,16 +304,12 @@ body.kb .bnav{display:none}
 <main id="top">
 <section class="hero wrap">
   <h1>Бытовая техника в&nbsp;Грозном <span class="h1s">с&nbsp;доставкой и&nbsp;рассрочкой</span></h1>
-  <p><span id="tc">17 товаров</span> с ценами. Выберите и закажите в WhatsApp за минуту.</p>
   <div class="row">
     <a class="btn lg" href="#catalog">Смотреть каталог</a>
     <a class="link" href="https://wa.me/79280040943" target="_blank" rel="noopener">Написать в WhatsApp</a>
     <a class="link" href="tel:+79280040943">Позвонить</a>
     <a class="link" href="https://instagram.com/tehnoodom" target="_blank" rel="noopener">Обзоры в Instagram</a>
   </div>
-  <div class="bars"><a class="rsbar" href="rassrochka.html"><b>Исламская рассрочка</b><span>до 12 месяцев · со взносом и без · от&nbsp;25&nbsp;000&nbsp;₽</span></a>
-  <a class="rsbar" href="#delivery"><b>Доставка</b><span>мелкий товар от&nbsp;350&nbsp;₽ · крупная техника по Грозному 1&nbsp;000&nbsp;₽</span></a></div>
-  <div class="trust"><span><b>Гарантия</b> до 1 года</span><span><b>Доставка</b> по Чечне и регионам</span><span><b>Грозный</b>, ул. Назарбаева 98</span></div>
 </section>
 
 <section class="wrap" id="catalog">
@@ -579,7 +575,6 @@ let cartRS=null;
 function drawCartRS(){const s=sum(),b=$("cartrs");b.hidden=s<RS.MIN;if(b.hidden)return;
   if(!cartRS)cartRS=RS.mount($("cartrsw"),{price:s,getText:st=>cartText(st),check:cartOk,btn:"Оформить заказ в рассрочку"});else cartRS.set(s)}
 $("addr").addEventListener("input",()=>{$("err").style.display="none"});
-(function(){const n=P.length,m=n%10,h=n%100;document.getElementById("tc").textContent=n+" "+(m==1&&h!=11?"товар":(m>=2&&m<=4&&(h<12||h>14))?"товара":"товаров")})();
 drawCart();
 const pv=$("pv");
 $("bnSearch").onclick=()=>{const q=$("q");q.scrollIntoView({behavior:"smooth",block:"center"});setTimeout(()=>q.focus({preventScroll:true}),350)};
