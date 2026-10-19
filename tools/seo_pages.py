@@ -73,7 +73,7 @@ def build(P, IMG, ORDER, og_img, slug, fmt, word):
     BR = json.loads(re.search(r'const BR=(\[.*?\]);', src).group(1))
     BRN = json.loads(re.search(r'const BRN=(\{.*?\});', src).group(1))
     SZ = json.loads(re.search(r'const SZ=(\{.*?\});', src).group(1))
-    TMR = re.search(r'<!-- Top.Mail.Ru counter -->.*?<!-- /Top.Mail.Ru counter -->', src, re.S).group(0)
+    TMR = re.search(r'<!-- Top.Mail.Ru counter -->.*?<!-- /Yandex.Metrika counter -->', src, re.S).group(0)
     ICON = re.search(r'<link rel="icon" href="(data:[^"]+)"', src).group(1)
     logo = re.search(r'<a class="brand"[^>]*><img src="data:image/(\w+);base64,([^"]+)"', src)
     open('logo.jpg', 'wb').write(base64.b64decode(logo.group(2)))

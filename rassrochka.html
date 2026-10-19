@@ -22,11 +22,25 @@ _tmr.push({id: "3803722", type: "pageView", start: (new Date()).getTime()});
 })(document, window, "tmr-code");
 document.addEventListener("click", function (e) {
   var t = e.target, g = t.closest(".rsbtn") ? "rassrochka" : t.closest(".buy,#pvwa") ? "zakaz" : t.closest("#send") ? "korzina_zakaz" : t.closest(".add") ? "korzina" : t.closest('a[href^="tel:"]') ? "zvonok" : t.closest('a[href*="wa.me"]') ? "whatsapp" : null;
-  if (g) _tmr.push({type: "reachGoal", id: 3803722, goal: g});
+  if (g) { _tmr.push({type: "reachGoal", id: 3803722, goal: g}); if (window.ym) ym(113679296, "reachGoal", g); }
 }, true);
 </script>
 <noscript><div><img src="https://top-fwz1.mail.ru/counter?id=3803722;js=na" style="position:absolute;left:-9999px;" alt="Top.Mail.Ru" /></div></noscript>
 <!-- /Top.Mail.Ru counter -->
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    window.dataLayer = window.dataLayer || [];
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=113679296', 'ym');
+
+    ym(113679296, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/113679296" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
 <style>
 :root{--bg:#0b0b0c;--card:#161618;--ink:#f3f1ec;--mute:#a19d95;--line:#2c2b29;--gold:#c9a45c}
 *{box-sizing:border-box;margin:0}html{scroll-behavior:smooth}

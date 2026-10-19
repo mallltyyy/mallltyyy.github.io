@@ -29,11 +29,25 @@ _tmr.push({id: "3803722", type: "pageView", start: (new Date()).getTime()});
 })(document, window, "tmr-code");
 document.addEventListener("click", function (e) {
   var t = e.target, g = t.closest(".rsbtn") ? "rassrochka" : t.closest(".buy,#pvwa") ? "zakaz" : t.closest("#send") ? "korzina_zakaz" : t.closest(".add") ? "korzina" : t.closest('a[href^="tel:"]') ? "zvonok" : t.closest('a[href*="wa.me"]') ? "whatsapp" : null;
-  if (g) _tmr.push({type: "reachGoal", id: 3803722, goal: g});
+  if (g) { _tmr.push({type: "reachGoal", id: 3803722, goal: g}); if (window.ym) ym(113679296, "reachGoal", g); }
 }, true);
 </script>
 <noscript><div><img src="https://top-fwz1.mail.ru/counter?id=3803722;js=na" style="position:absolute;left:-9999px;" alt="Top.Mail.Ru" /></div></noscript>
 <!-- /Top.Mail.Ru counter -->
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    window.dataLayer = window.dataLayer || [];
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=113679296', 'ym');
+
+    ym(113679296, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/113679296" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
 <style>
 :root{--bg:#f5f5f7;--card:#fff;--ink:#1d1d1f;--mute:#6e6e73;--line:#d2d2d7;--blue:#0071e3;--blue-h:#0077ed;--green:#1d8f3a;--nav:rgba(251,251,253,.8)}
 @media (prefers-color-scheme:dark){:root{--bg:#000;--card:#1c1c1e;--ink:#f5f5f7;--mute:#a1a1a6;--line:#38383a;--blue:#2997ff;--blue-h:#47a6ff;--green:#30d158;--nav:rgba(22,22,23,.8)}}

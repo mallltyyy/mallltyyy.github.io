@@ -61,7 +61,7 @@ LOGO=re.search(r'<a class="brand"[^>]*><img src="(data:[^"]+)"',src).group(1)
 ICON=re.search(r'<link rel="icon" href="(data:[^"]+)"',src).group(1)
 BRN=json.loads(re.search(r'const BRN=(\{.*?\});',src).group(1)) if 'const BRN=' in src else {}
 RSMIN=25000
-TMR=re.search(r'<!-- Top.Mail.Ru counter -->.*?<!-- /Top.Mail.Ru counter -->',src,re.S).group(0)
+TMR=re.search(r'<!-- Top.Mail.Ru counter -->.*?<!-- /Yandex.Metrika counter -->',src,re.S).group(0)
 def og_rs():
     out='og/rassrochka.jpg'
     W,H=1200,630; im=Image.new('RGB',(W,H),(11,11,12)); d=ImageDraw.Draw(im)
