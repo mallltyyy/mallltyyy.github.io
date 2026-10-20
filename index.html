@@ -530,7 +530,7 @@ function draw(){
   const on=seg.querySelector('[aria-pressed="true"]');if(on&&matchMedia("(max-width:699px)").matches)seg.scrollLeft=Math.max(0,on.offsetLeft-16);
   grid.innerHTML=list.length?list.map((p,k)=>`
   <article class="card" data-i="${P.indexOf(p)}" tabindex="0" aria-label="${esc(p[0])}">
-    <div class="photo">${p[6]?'<span class="vbadge">Видеообзор</span>':""}<img class="hq" src="t/${IMG[p[4]]}" data-full="${IMG[p[4]]}" alt="${esc(p[0])}" loading="${k<6?'eager':'lazy'}"></div>
+    <div class="photo">${p[6]?'<span class="vbadge">Видеообзор</span>':""}<img class="hq" src="t/${IMG[p[4]]}" data-full="${IMG[p[4]]}" alt="${esc(p[0])}" width="${(SZ[p[4]]||[720,960])[0]}" height="${(SZ[p[4]]||[720,960])[1]}" loading="${k<6?'eager':'lazy'}"></div>
     <div class="body">
       ${(([t,m])=>`<span class="cat">${esc(t||p[1])}</span>
       <h3>${esc(nbh(m))}</h3>`)(splitName(p[0]))}
@@ -605,7 +605,7 @@ function openP(i,push){const p=P[i];if(!p)return;
   const rb=$("pvrs");if(rsOk(p)){rb.hidden=false;rb.innerHTML='<h4>Рассрочка<small>Исламская, через DIRHAM · 3–12 месяцев</small></h4><div></div>';
     RS.mount(rb.lastChild,{price:p[3],getText:st=>"Здравствуйте! Хочу оформить в рассрочку:\n"+p[0]+" — "+fmt(p[3])+"\n"+pUrl(p[4])+"\n\n"+st.line})}else{rb.hidden=true;rb.innerHTML=""}
   const sim=P.map((x,k)=>[x,k]).filter(([x,k])=>k!==+i&&x[1]===p[1]).sort((a,b)=>Math.abs(a[0][3]-p[3])-Math.abs(b[0][3]-p[3])).slice(0,8);
-  $("pvsim").hidden=!sim.length;$("pvsimr").innerHTML=sim.map(([x,k])=>`<button class="simc" data-i="${k}"><img src="t/${IMG[x[4]]}" data-full="${IMG[x[4]]}" alt="" loading="lazy"><span>${esc(splitName(x[0])[1])}</span><b>${x[3]?fmt(x[3]):"Цена по запросу"}</b></button>`).join("");$("pvsimr").scrollLeft=0;
+  $("pvsim").hidden=!sim.length;$("pvsimr").innerHTML=sim.map(([x,k])=>`<button class="simc" data-i="${k}"><img src="t/${IMG[x[4]]}" data-full="${IMG[x[4]]}" alt="" width="${(SZ[x[4]]||[720,960])[0]}" height="${(SZ[x[4]]||[720,960])[1]}" loading="lazy"><span>${esc(splitName(x[0])[1])}</span><b>${x[3]?fmt(x[3]):"Цена по запросу"}</b></button>`).join("");$("pvsimr").scrollLeft=0;
   $("pvdl").innerHTML=(BIG.has(p[1])?"Доставка по Грозному 1 000 ₽":"Доставка по Грозному от 350 ₽")+" · <u>все тарифы</u>";
   $("pvadd").dataset.i=i;$("pvwa").href=waOrder(i);$("pvig").href=p[6]||"https://instagram.com/tehnoodom";$("pvig").querySelector("span").textContent=p[6]?"Смотреть обзор этого товара":"Смотреть обзоры в Instagram";
   pv.dataset.i=i;pv.classList.add("open");pv.setAttribute("aria-hidden","false");document.body.style.overflow="hidden";
