@@ -98,6 +98,7 @@ open('rassrochka.html','w',encoding='utf-8').write(f'''<!doctype html>
 <html lang="ru"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Исламская рассрочка до 12 месяцев — TEHNOODOM</title>
+<link rel="canonical" href="https://tehnoodom.github.io/rassrochka.html">
 <meta name="description" content="Рассрочка на технику через DIRHAM: 3, 6, 9 или 12 месяцев, со взносом и без. На товары от 25 000 ₽. {len(items)} {word(len(items))}. TEHNOODOM, Грозный.">
 <meta property="og:type" content="website"><meta property="og:site_name" content="TEHNOODOM">
 <meta property="og:title" content="Исламская рассрочка до 12 месяцев — TEHNOODOM">

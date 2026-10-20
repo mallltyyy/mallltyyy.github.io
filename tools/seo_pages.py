@@ -139,11 +139,23 @@ def build(P, IMG, ORDER, og_img, slug, fmt, word):
         url = f'{BASE}p/{key}.html'
         og = og_img(key, IMG[key])
         specs = [x.strip() for x in spec.split(' · ') if x.strip()]
-        title = f'{name} — {fmt(price)} купить в Грозном' if price else f'{name} — купить в Грозном'
+        # короткое название для title: убираем общие слова в начале, пока не влезет (бренд и модель остаются)
+        tail = f' — {fmt(price)}, Грозный' if price else ' — Грозный'
+        words = name.split()
+        while len(' '.join(words)) + len(tail) > 68 and len(words) > 3:
+            words = words[1:]
+        short = ' '.join(words)
+        if short and short[0].islower():
+            short = short[0].upper() + short[1:]
+        title = short + tail
+        suffix = ' Заказ в WhatsApp, доставка по Чечне.'
         desc = f'{name}: ' + ', '.join(specs)
-        if len(desc) > 150:
-            desc = desc[:147].rsplit(' ', 1)[0].rstrip(',') + '…'
-        desc += ' Заказ в WhatsApp, доставка по Чечне.'
+        limit = 158 - len(suffix)
+        if len(desc) > limit:
+            desc = desc[:limit - 1].rsplit(' ', 1)[0].rstrip(',:;· ') + '…'
+        if desc[-1] not in '.…!?':
+            desc += '.'
+        desc += suffix
         w, h = SZ.get(key, [720, 960])
         wa = WA + quote(f'Здравствуйте! Хочу заказать:\n{name}' + (f' — {fmt(price)}' if price else '') + f'\n{url}')
         prod = {"@context": "https://schema.org", "@type": "Product", "name": name, "image": BASE + IMG[key],
