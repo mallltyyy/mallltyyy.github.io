@@ -14,6 +14,16 @@ def word(n):
 t=open('index.html',encoding='utf-8').read().split('\n')
 get=lambda pre,off: json.loads(next(l for l in t if l.startswith(pre))[off:].rstrip(';'))
 P=get('const P=',8); IMG=get('const IMG=',10); ORDER=get('const ORDER=',12)
+# даты добавления товаров (для слайда «Новинки»): новые ключи получают текущее время UTC
+import datetime
+_ai=next((n for n,l in enumerate(t) if l.startswith('const ADDED=')),None)
+if _ai is not None:
+    _A=json.loads(t[_ai][12:].rstrip(';'))
+    _now=datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M')
+    _new={p[4]:_A.get(p[4],_now) for p in P}
+    if _new!=_A:
+        t[_ai]='const ADDED='+json.dumps(_new,separators=(',',':'))+';'
+        open('index.html','w',encoding='utf-8').write('\n'.join(t))
 for d in ('p','c','og'): os.makedirs(d,exist_ok=True)
 # уменьшенные фото для сетки каталога (t/), полные остаются для карточки товара
 os.makedirs('t',exist_ok=True)
