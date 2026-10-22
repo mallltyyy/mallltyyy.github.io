@@ -335,6 +335,57 @@ body.kb .bnav{display:none}
 @media (hover:hover) and (min-width:1000px){.promo-nav{display:block}}
 @media (max-width:700px){.promo{margin:20px 0 4px}.promo-s{padding:16px 14px 18px}.promo-hd{margin-bottom:12px}.promo-hd .btn{padding:8px 14px;font-size:13px}.hero .promo .promo-sub{font-size:13px}.promo-g{gap:8px}.promo-i{flex-basis:calc((100% - 16px)/3);gap:4px}.promo-im{aspect-ratio:1/1;border-radius:12px}.promo-im img{object-position:center 55%}.promo-pr{font-size:14px}.promo-nm{font-size:11px}}
 @media (prefers-reduced-motion:reduce){.promo-tr{transition:none}}
+
+/* ===== motion ===== */
+:root{--ease:cubic-bezier(.2,.8,.2,1);--spring:cubic-bezier(.34,1.4,.5,1)}
+/* card affordance */
+.card .dtl{display:inline-flex;align-items:center;gap:2px;align-self:flex-start;margin-top:2px;font-size:13px;font-weight:600;color:var(--gold);line-height:1.2}
+.card .dtl svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;transition:transform .3s var(--ease)}
+.card:hover .dtl svg{transform:translateX(3px)}
+.card .photo img{transition:opacity .45s ease,transform .6s var(--ease)}
+.card .photo img.fi{opacity:0}
+@media (hover:hover){.card:hover .photo img{transform:scale(1.04)}}
+.card{transition:transform .35s var(--ease),box-shadow .35s,border-color .35s}
+.card:active{transform:scale(.97);transition-duration:.12s}
+@keyframes cin{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.card.cin{animation:cin .5s var(--ease) both;animation-delay:var(--d,0ms)}
+/* product sheet */
+.pv{display:flex!important;visibility:hidden;opacity:0;pointer-events:none;transition:opacity .32s var(--ease),visibility 0s linear .38s}
+.pv.open{visibility:visible;opacity:1;pointer-events:auto;transition:opacity .28s var(--ease),visibility 0s}
+.pvp{animation:none!important;transform:translateY(100%);transition:transform .42s var(--ease);overscroll-behavior:contain}
+.pv.open .pvp{transform:none}
+@media (min-width:700px){.pvp{transform:translateY(26px) scale(.97);opacity:0;transition:transform .4s var(--ease),opacity .3s ease}.pv.open .pvp{opacity:1}}
+.pvimg{position:relative;background-color:var(--frame);background-repeat:no-repeat;background-position:center;background-size:cover}
+.pvimg img{transition:opacity .4s ease}
+.pvimg.ld img{opacity:0}
+@keyframes swapin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.pvp.swap .pvimg,.pvp.swap .pvb{animation:swapin .4s var(--ease) both}
+.pvp.swap .pvb{animation-delay:.05s}
+/* cart sheet */
+.ov{display:block!important;visibility:hidden;opacity:0;pointer-events:none;transition:opacity .3s var(--ease),visibility 0s linear .4s}
+.ov.open{visibility:visible;opacity:1;pointer-events:auto;transition:opacity .28s var(--ease),visibility 0s}
+.pan{transform:translateY(100%);transition:transform .42s var(--ease);overscroll-behavior:contain}
+.ov.open .pan{transform:none}
+.ci{transition:height .28s var(--ease),opacity .22s ease,transform .28s var(--ease),padding .28s var(--ease)}
+.ci.out{overflow:hidden;opacity:0;transform:translateX(40px);height:0!important;padding-top:0;padding-bottom:0;border-bottom-width:0}
+#sum,.qty span{display:inline-block}
+/* feedback */
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.28)}100%{transform:scale(1)}}
+.pop,.bump{animation:pop .42s var(--spring)}
+.cadd.ok{animation:pop .42s var(--spring)}
+.btn,.more,.cadd,.cats button,.seg button,.bnav a,.bnav button,.qty button,.pvx,#cx,.promo-i,.rsbtn{transition:transform .16s var(--ease),background .2s,color .2s,border-color .2s,box-shadow .2s}
+.btn:active,.more:active,.cadd:active,.cats button:active,.seg button:active,.bnav a:active,.bnav button:active,.qty button:active,.pvx:active,#cx:active,.promo-i:active,.rsbtn:active{transform:scale(.94)}
+@keyframes fdown{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+#addrBox:not([hidden]),.rsb{animation:fdown .3s var(--ease)}
+@keyframes shake{0%,100%{transform:none}20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.err{animation:shake .4s ease}
+@keyframes popin{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
+.cartfab.show,.totop.show{animation:popin .35s var(--spring)}
+/* section reveal */
+html.anim .rv{opacity:0;transform:translateY(24px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+html.anim .rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+@media (prefers-reduced-motion:reduce){html.anim .rv{opacity:1;transform:none}.pvimg.ld img{opacity:1}}
 </style>
 </head>
 <body>
@@ -569,7 +620,7 @@ function draw(){
       ${(([t,m])=>`<span class="cat">${esc(t||p[1])}</span>
       <h3>${esc(nbh(m))}</h3>`)(splitName(p[0]))}
       <span class="price${p[3]?'':' ask'}">${p[3]?fmt(p[3]):"Цена по запросу"}</span>${rsOk(p)?`<span class="rs">Рассрочка <span class="nw">от ${fmt(RS.from(p[3])).replace(" ₽","")} ₽/мес</span></span>`:""}
-      <div class="acts"><a class="btn buy" href="${waOrder(P.indexOf(p))}" target="_blank" rel="noopener">Заказать</a><button class="cadd add" data-i="${P.indexOf(p)}" aria-label="Добавить в корзину" title="В корзину"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2.2l2.1 10.2a1.6 1.6 0 0 0 1.6 1.3h8.4a1.6 1.6 0 0 0 1.6-1.2L20.5 8H6.2"/><circle cx="9.5" cy="19.5" r="1.3"/><circle cx="17" cy="19.5" r="1.3"/><path d="M13 9.5v4M11 11.5h4"/></svg></button></div>
+      <span class="dtl" aria-hidden="true">Подробнее<svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span><div class="acts"><a class="btn buy" href="${waOrder(P.indexOf(p))}" target="_blank" rel="noopener">Заказать</a><button class="cadd add" data-i="${P.indexOf(p)}" aria-label="Добавить в корзину" title="В корзину"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2.2l2.1 10.2a1.6 1.6 0 0 0 1.6 1.3h8.4a1.6 1.6 0 0 0 1.6-1.2L20.5 8H6.2"/><circle cx="9.5" cy="19.5" r="1.3"/><circle cx="17" cy="19.5" r="1.3"/><path d="M13 9.5v4M11 11.5h4"/></svg></button></div>
     </div>
   </article>`).join(""):`<div class="empty"><p><b>${q?`По запросу «${esc(q)}» ничего не найдено`:"Ничего не найдено"}</b></p><p>Проверьте написание или напишите нам — подберём и привезём.</p><div class="ebtns"><button type="button" id="reset2">Сбросить поиск</button><a class="btn" href="https://wa.me/79280040943?text=${encodeURIComponent("Здравствуйте! Ищу: "+(q||"технику")+". Есть в наличии?")}" target="_blank" rel="noopener">Спросить в WhatsApp</a></div></div>`;
 }
@@ -700,6 +751,75 @@ const PROMO=[
  vp.addEventListener('touchend',()=>{tr.style.transition='';if(x0!==null&&Math.abs(dx)>40)go(cur+(dx<0?1:-1));else go(cur);x0=null;play()});
  tr.addEventListener('click',e=>{const a=e.target.closest('a[data-i]');if(!a)return;e.preventDefault();if(moved)return;if(typeof openP==='function')openP(+a.dataset.i,true)});
  go(0);play();
+})();
+</script>
+
+<script id="motion-js">
+(function(){
+ const RM=matchMedia('(prefers-reduced-motion:reduce)').matches,$=id=>document.getElementById(id);
+ const pv=$('pv'),grid=$('grid'),items=$('items'),ov=$('ov');if(!pv||!grid)return;
+ /* product sheet: thumbnail placeholder + smooth swap */
+ const pvi=$('pvi'),box=pvi&&pvi.parentNode;
+ if(pvi){const done=()=>box.classList.remove('ld');pvi.addEventListener('load',done);pvi.addEventListener('error',done)}
+ const pre=new Set(),preload=src=>{if(src&&!pre.has(src)){pre.add(src);const im=new Image();im.decoding='async';im.src=src}};
+ if(typeof window.openP==='function'){const o=window.openP;
+  window.openP=function(i){const was=pv.classList.contains('open');const r=o.apply(this,arguments);const p=P[i];
+   if(p&&pvi){const sz=typeof SZ==='object'&&SZ[p[4]];if(sz){pvi.width=sz[0];pvi.height=sz[1]}
+    pvi.style.visibility='';box.classList.remove('noimg');box.style.backgroundImage='url("t/'+IMG[p[4]]+'")';
+    if(pvi.complete&&pvi.naturalWidth)box.classList.remove('ld');else box.classList.add('ld');
+    if(was&&!RM){const b=pv.querySelector('.pvp');b.classList.remove('swap');void b.offsetWidth;b.classList.add('swap')}}
+   return r}}
+ /* preload full photo on first touch / hover */
+ const intent=e=>{const c=e.target.closest&&e.target.closest('.card,.simc,.promo-i');if(!c)return;const i=+c.dataset.i;if(P[i])preload(IMG[P[i][4]])};
+ document.addEventListener('pointerdown',intent,{passive:true,capture:true});
+ document.addEventListener('pointerover',e=>{if(e.pointerType==='mouse')intent(e)},{passive:true});
+ /* cards: stagger in + photo fade */
+ let seen=new Set();
+ const prep=()=>{const now=new Set();let k=0;
+  grid.querySelectorAll('.card').forEach(c=>{const id=c.dataset.i;now.add(id);
+   if(!RM&&!seen.has(id)){c.style.setProperty('--d',Math.min(k++,10)*35+'ms');c.classList.add('cin');c.addEventListener('animationend',()=>c.classList.remove('cin'),{once:true})}
+   const im=c.querySelector('.photo img');if(im&&!(im.complete&&im.naturalWidth)&&!RM){im.classList.add('fi');const f=()=>im.classList.remove('fi');im.addEventListener('load',f,{once:true});im.addEventListener('error',f,{once:true})}});
+  seen=now};
+ prep();new MutationObserver(prep).observe(grid,{childList:true});
+ /* fly to cart */
+ const target=()=>[$('bnCart'),$('cartBtn')].find(el=>el&&el.getClientRects().length&&el.getBoundingClientRect().width>0);
+ const bump=el=>{if(!el)return;el.classList.remove('bump');void el.offsetWidth;el.classList.add('bump')};
+ function fly(img){const t=target();if(!t)return;if(RM||!img||!img.getClientRects().length){bump(t);return}
+  const a=img.getBoundingClientRect(),b=t.getBoundingClientRect(),c=img.cloneNode();
+  c.removeAttribute('loading');c.removeAttribute('id');c.className='';
+  Object.assign(c.style,{position:'fixed',left:a.left+'px',top:a.top+'px',width:a.width+'px',height:a.height+'px',objectFit:'contain',zIndex:80,pointerEvents:'none',margin:0,borderRadius:'14px',visibility:'visible',opacity:1});
+  document.body.appendChild(c);
+  const dx=b.left+b.width/2-(a.left+a.width/2),dy=b.top+b.height/2-(a.top+a.height/2);
+  const an=c.animate([{transform:'none',opacity:1},{transform:`translate(${dx*.45}px,${dy*.45-70}px) scale(.45)`,opacity:.95,offset:.5},{transform:`translate(${dx}px,${dy}px) scale(.1)`,opacity:.3}],{duration:700,easing:'cubic-bezier(.45,0,.25,1)'});
+  an.onfinish=an.oncancel=()=>{c.remove();bump(t)}}
+ grid.addEventListener('click',e=>{const b=e.target.closest('.add');if(!b)return;const c=b.closest('.card');fly(c&&c.querySelector('.photo img'))});
+ const pa=$('pvadd');if(pa)pa.addEventListener('click',()=>{fly(pvi);bump(pa)});
+ /* badges and totals */
+ ['bncnt','cnt'].forEach(id=>{const el=$(id);if(el){let v=el.textContent;new MutationObserver(()=>{if(el.textContent!==v){if(+el.textContent>+v)bump(el);v=el.textContent}}).observe(el,{childList:true,characterData:true,subtree:true})}});
+ /* cart rows: animated remove + qty pop */
+ if(items){items.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b._go){b._go=0;return}
+   const row=b.closest('.ci');if(!row)return;
+   const rem=b.dataset.x!==undefined||(b.dataset.m!==undefined&&(cart[b.dataset.m]||0)<=1);
+   if(rem&&!RM){e.stopImmediatePropagation();row.style.height=row.offsetHeight+'px';void row.offsetHeight;row.classList.add('out');setTimeout(()=>{b._go=1;b.click()},270);return}
+   const i=b.dataset.m??b.dataset.p;
+   if(i!==undefined)setTimeout(()=>{const nb=items.querySelector('[data-p="'+i+'"]');bump(nb&&nb.closest('.qty').querySelector('span'));bump($('sum'))},0)},true)}
+ /* drag down to close sheets (phones) */
+ function drag(panel,close){if(!panel)return;let y0=null,dy=0,t0=0,on=false;
+  panel.addEventListener('touchstart',e=>{if(innerWidth>=700||e.touches.length>1||panel.scrollTop>0||e.target.closest('input,textarea,select,.promo-vp')){y0=null;return}y0=e.touches[0].clientY;dy=0;on=false;t0=Date.now()},{passive:true});
+  panel.addEventListener('touchmove',e=>{if(y0===null)return;dy=e.touches[0].clientY-y0;
+   if(!on){if(dy<6||panel.scrollTop>0){if(dy<0)y0=null;return}on=true}
+   e.preventDefault();panel.style.transition='none';panel.style.transform=`translateY(${Math.max(0,dy)}px)`},{passive:false});
+  const end=()=>{if(y0===null)return;y0=null;if(!on)return;on=false;const v=dy/Math.max(1,Date.now()-t0);
+   panel.style.transition='';panel.style.transform='';if(dy>120||v>.6)close()};
+  panel.addEventListener('touchend',end);panel.addEventListener('touchcancel',end)}
+ drag(pv.querySelector('.pvp'),()=>window.closeP&&window.closeP());
+ drag(ov&&ov.querySelector('.pan'),()=>ov.classList.remove('open'));
+ /* reveal sections on scroll */
+ if('IntersectionObserver' in window&&!RM){const els=['how','delivery','opt','contacts','info'].map($).filter(Boolean);
+  if(els.length){document.documentElement.classList.add('anim');
+   const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target)}}),{rootMargin:'0px 0px -8% 0px'});
+   els.forEach(el=>{el.classList.add('rv');io.observe(el)});
+   addEventListener('hashchange',()=>{const t=$(location.hash.slice(1));if(t&&t.classList.contains('rv'))t.classList.add('in')})}}
 })();
 </script>
 </body>
