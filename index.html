@@ -730,7 +730,7 @@ function openP(i,push){const p=P[i];if(!p)return;
   $("pvx").focus({preventScroll:true});pv.querySelector(".pvp").scrollTop=0}
 function closeP(){pv.classList.remove("open");pv.setAttribute("aria-hidden","true");document.body.style.overflow="";setCatHash()}
 grid.addEventListener("click",e=>{if(e.target.closest(".add,.buy"))return;const c=e.target.closest(".card");if(c)openP(+c.dataset.i)});
-grid.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.classList.contains("card"))openP(+e.target.dataset.i)});
+grid.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&e.target.classList.contains("card")){e.preventDefault();openP(+e.target.dataset.i)}});
 $("pvsimr").addEventListener("click",e=>{const c=e.target.closest(".simc");if(c)openP(+c.dataset.i)});
 const BIG=new Set(["Холодильники и морозильники","Стиральные машины","Плиты"]);
 $("pvdl").onclick=()=>{closeP();setTimeout(()=>document.getElementById("delivery").scrollIntoView({behavior:"smooth",block:"start"}),60)};
