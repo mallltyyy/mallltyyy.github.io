@@ -607,8 +607,9 @@ const splitName=n=>{for(const b of BR){const m=new RegExp("(^|[^A-Za-z])("+b+")(
 const nbh=t=>t.replace(/([A-Za-z0-9])-([A-Za-z0-9])/g,"$1\u2011$2");const norm=t=>t.toLowerCase().replace(/ё/g,"е");const cmp=t=>t.replace(/[\s\-‑.,·/()’'ʼ`]/g,"");
 P.forEach(p=>{p.h=norm(p[0]+" "+p[1]+" "+p[2]+" "+p.b);p.hc=cmp(p.h)});
 const SYN=[["стирал",["стиральн"]],["стиралк",["стиральн"]],["холодос",["холодильн","морозильн"]],["холодил",["холодильн","морозильн"]],["морозил",["морозильн"]],["пылик",["пылесос"]],["пылесос",["пылесос"]],["микров",["микроволнов"]],["микра",["микроволнов"]],["свч",["микроволнов"]],["мобил",["телефон"]],["телеф",["телефон"]],["наушн",["наушник"]],["уши",["наушник"]],["airpod",["наушник"]],["эирпод",["наушник"]],["повер",["повербанк"]],["павер",["повербанк"]],["пауэр",["повербанк"]],["плит",["плит","варочн"]],["духовк",["духов"]],["кофевар",["кофе"]],["кофемаш",["кофе"]],["аэрофрит",["аэрогрил"]],["фритюр",["аэрогрил"]],["обогрев",["обогрев"]],["увлажн",["увлажн"]],["стрижк",["стрижк"]],["машинк",["машинк"]],["роутер",["роутер","модем"]],["модем",["роутер","модем"]],["симк",["sim"]],["лж",["lg"]],["элджи",["lg"]],["самсунг",["samsung"]],["дайсон",["dyson"]],["бош",["bosch"]],["миле",["miele"]],["тефаль",["tefal"]],["браун",["braun"]],["роборок",["roborock"]],["дриме",["dreame"]],["хоко",["hoco"]],["ремакс",["remax"]],["кинг",["king"]],["мидеа",["midea"]],["мидея",["midea"]],["атлант",["atlant"]],["индезит",["indesit"]],["хитачи",["hitachi"]],["беко",["beko"]],["горенье",["gorenje"]],["хендай",["hyundai"]],["хюндай",["hyundai"]],["нокиа",["nokia"]],["нокия",["nokia"]],["бирюс",["бирюс"]],["центек",["centek"]],["соканий",["sokany"]],["сокани",["sokany"]],["кроньер",["cronier"]],["олакс",["olax"]],["фитбит",["fitbit"]],["вайфай",["wi‑fi","wi-fi","wifi"]],["делонг",["longhi"]],["хаус",["hausroland"]],["роланд",["hausroland"]],["синг",["sing-e","sing‑e"]],["кемей",["kemei"]],["ипара",["iparah"]],["витек",["vitek"]],["притек",["pritech"]],["бебилис",["babyliss"]],["бэбилис",["babyliss"]],["бабилис",["babyliss"]],["кронье",["cronier"]],["пролисс",["proliss"]],["тефал",["tefal"]]];
-const tokOk=(p,t)=>{if(p.h.includes(t)||p.hc.includes(cmp(t)))return true;for(const[k,v]of SYN)if(t.startsWith(k)&&v.some(x=>p.h.includes(x)))return true;return false};
-const match=(p,q)=>!q||norm(q).split(/\s+/).filter(Boolean).every(t=>tokOk(p,t));
+const LAT={"а":"a","в":"b","е":"e","к":"k","м":"m","н":"h","о":"o","р":"p","с":"c","т":"t","у":"y","х":"x"};const lat=t=>t.replace(/[авекмнорстух]/g,c=>LAT[c]);
+const tokOk=(p,t)=>{if(p.h.includes(t)||p.hc.includes(cmp(t)))return true;if(/\d/.test(t)&&(p.hl||(p.hl=lat(p.hc))).includes(lat(cmp(t))))return true;for(const[k,v]of SYN)if(t.startsWith(k)&&v.some(x=>p.h.includes(x)))return true;return false};
+const match=(p,q)=>{if(!q)return true;const ts=norm(q).split(/\s+/).filter(t=>t.length>1||/\d/.test(t));return !ts.length||ts.every(t=>tokOk(p,t))};
 const seg=document.getElementById("seg"),grid=document.getElementById("grid");
 const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const fmt=n=>n.toLocaleString("ru-RU").replace(/\u00a0/g," ")+" ₽";
@@ -645,7 +646,7 @@ function draw(){
   const on=seg.querySelector('[aria-pressed="true"]');if(on&&matchMedia("(max-width:699px)").matches)seg.scrollLeft=Math.max(0,on.offsetLeft-16);
   grid.innerHTML=list.length?list.map((p,k)=>`
   <article class="card" data-i="${P.indexOf(p)}" tabindex="0" aria-label="${esc(p[0])}">
-    <div class="photo">${p[6]?'<span class="vbadge">Видеообзор</span>':""}<img class="hq" src="t/${IMG[p[4]]}" data-full="${IMG[p[4]]}" alt="${esc(p[0])}" width="${(SZ[p[4]]||[720,960])[0]}" height="${(SZ[p[4]]||[720,960])[1]}" loading="${k<6?'eager':'lazy'}"></div>
+    <div class="photo">${p[6]?'<span class="vbadge">Видеообзор</span>':""}<img class="hq" src="t/${IMG[p[4]]}" data-full="${IMG[p[4]]}" alt="${esc(p[0])}" width="${(SZ[p[4]]||[720,960])[0]}" height="${(SZ[p[4]]||[720,960])[1]}" loading="lazy"></div>
     <div class="body">
       ${(([t,m])=>`<span class="cat">${esc(t||p[1])}</span>
       <h3>${esc(nbh(m))}</h3>`)(splitName(p[0]))}
@@ -696,7 +697,8 @@ function cartOk(){const ship=document.querySelector('input[name=dm]:checked').va
   $("err").style.display="none";return true}
 function cartText(rs){
   const ship=document.querySelector('input[name=dm]:checked').value==="ship",addr=$("addr").value.trim();
-  let t="Здравствуйте! Хочу оформить заказ"+(rs?" в рассрочку":"")+":\n\n"+Object.entries(cart).map(([i,n],k)=>`${k+1}. ${P[i][0]} — ${n} × ${fmt(P[i][3])} = ${fmt(P[i][3]*n)}`).join("\n");
+  const oid=window.__oid||(window.__oid="T"+new Date().toISOString().slice(2,10).replace(/-/g,"")+"-"+Math.random().toString(36).slice(2,5).toUpperCase());
+  let t="Здравствуйте! Хочу оформить заказ"+(rs?" в рассрочку":"")+" (заявка "+oid+"):\n\n"+Object.entries(cart).map(([i,n],k)=>`${k+1}. ${P[i][0]} — ${n} × ${fmt(P[i][3])} = ${fmt(P[i][3]*n)}`).join("\n");
   t+=`\n\nИтого: ${fmt(sum())} (без доставки)\n`;
   if(rs)t+=rs.line+"\n";
   t+=ship?`Получение: доставка\nАдрес: ${addr}`:"Получение: самовывоз (Грозный, ул. Назарбаева 98)";
@@ -764,10 +766,11 @@ const PROMO=[
  if(!tr||!slides.length){if(root)root.remove();return}
  tr.innerHTML=slides.map((s,n)=>`<div class="promo-s" role="group" aria-roledescription="слайд" aria-label="${n+1} из ${slides.length}">
   <div class="promo-hd"><div>${s.tag?`<span class="promo-tag">${esc(s.tag)}</span>`:""}<h2 class="promo-h">${esc(s.h)}</h2>${s.sub?`<p class="promo-sub">${esc(s.sub)}</p>`:""}</div>${s.href?`<a class="btn" href="${esc(s.href)}">${esc(s.btn||'Подробнее')}</a>`:""}</div>
-  <div class="promo-g">${s.items.map(i=>{const p=P[i];const im=IMG[p[4]];return `<a class="promo-i" href="#p=${esc(p[4])}" data-i="${i}"><div class="promo-im">${im?`<img src="t/${esc(im)}" alt="${esc(p[0])}" loading="${n?'lazy':'eager'}" decoding="async" onerror="this.src='${esc(im)}';this.onerror=null">`:""}</div><div class="promo-pr">${rub(p[3])}</div><div class="promo-nm">${esc(shortN(p[0]))}</div></a>`}).join("")}</div></div>`).join("");
+  <div class="promo-g">${s.items.map((i,k)=>{const p=P[i];const im=IMG[p[4]];return `<a class="promo-i" href="#p=${esc(p[4])}" data-i="${i}"><div class="promo-im">${im?`<img ${n?'data-src':'src'}="t/${esc(im)}" alt="${esc(p[0])}" ${!n&&k<3?'fetchpriority="high"':'loading="lazy"'} decoding="async" onerror="this.src='${esc(im)}';this.onerror=null">`:""}</div><div class="promo-pr">${rub(p[3])}</div><div class="promo-nm">${esc(shortN(p[0]))}</div></a>`}).join("")}</div></div>`).join("");
  const n=slides.length;dots.innerHTML=slides.map((_,i)=>`<button type="button" aria-label="Слайд ${i+1}"></button>`).join("");
  const D=[...dots.children];let cur=0,timer=null,paused=false;
- const go=i=>{cur=(i+n)%n;tr.style.transform=`translateX(${-cur*100}%)`;D.forEach((d,k)=>d.setAttribute('aria-current',k===cur))};
+ const ld=j=>{const sl=tr.children[(j+n)%n];if(sl)sl.querySelectorAll('img[data-src]').forEach(m=>{m.src=m.dataset.src;m.removeAttribute('data-src')})};
+ const go=i=>{cur=(i+n)%n;ld(cur);ld(cur+1);tr.style.transform=`translateX(${-cur*100}%)`;D.forEach((d,k)=>d.setAttribute('aria-current',k===cur))};
  const play=()=>{clearInterval(timer);if(n>1&&!paused&&!document.hidden)timer=setInterval(()=>go(cur+1),5000)};
  D.forEach((d,k)=>d.onclick=()=>{go(k);play()});
  root.querySelector('.prev').onclick=()=>{go(cur-1);play()};
@@ -857,6 +860,20 @@ const PROMO=[
 (function(){if(typeof draw!=='function')return;
  const set=()=>document.body.classList.toggle('filt',cat!=="Все"||!!q||brand!=="Все");
  const d=window.draw;window.draw=function(){const r=d.apply(this,arguments);set();return r};set();
+})();
+</script>
+
+<script id="redesign-v2">
+(function(){
+ const goal=(g,par)=>{try{window._tmr&&_tmr.push({type:"reachGoal",id:3803722,goal:g});if(window.ym)ym(113679296,"reachGoal",g,par||{})}catch(e){}};
+ /* card views */
+ if(typeof window.openP==='function'){const o=window.openP;window.openP=function(i){const r=o.apply(this,arguments);if(P[i])goal("kartochka",{tovar:P[i][4]});return r}}
+ /* search: one goal per finished query, separate goal when nothing found */
+ const qi=document.getElementById("q");let tm=0,last="";
+ if(qi)qi.addEventListener("input",()=>{clearTimeout(tm);tm=setTimeout(()=>{const v=qi.value.trim().toLowerCase();if(v.length<2||v===last)return;last=v;
+   const n=P.filter(p=>match(p,v)).length;goal("poisk",{q:v,n});if(!n)goal("poisk_net",{q:v})},1500)});
+ /* new order number after each send */
+ const sd=document.getElementById("send");if(sd)sd.addEventListener("click",()=>setTimeout(()=>{if(!Object.keys(cart).length||document.getElementById("err").style.display!=="block")window.__oid=null},0));
 })();
 </script>
 </body>
