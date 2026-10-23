@@ -399,7 +399,7 @@ html.anim .rv.in{opacity:1;transform:none}
 .promo .promo-sub{font-size:14px;line-height:1.35;color:var(--mute);margin:4px 0 0}
 .tools .promo{margin:16px 0 4px;animation:none}
 body.filt #promo{display:none}
-.promo-dots button{box-sizing:content-box;border:10px solid transparent;background-clip:padding-box;margin:-10px -6px}
+.promo-dots button{position:relative}.promo-dots button::before{content:"";position:absolute;inset:-12px -4px}
 @media (max-width:699px){
  .hero{padding:18px 16px 4px!important;text-align:left}
  .hero h1{font-size:clamp(23px,6.5vw,30px)!important;margin:0;letter-spacing:-.02em}
@@ -414,6 +414,34 @@ body.filt #promo{display:none}
  .promo-nm{font-size:12px}
  .pvimg img{max-height:56vh;object-fit:contain}
  .pvimg{background-size:contain}
+}
+
+/* ===== redesign-safe v3 ===== */
+.resbar{flex-wrap:wrap;row-gap:8px}
+.resbar>span:first-child{white-space:nowrap}
+.resbar .rbtn{margin-left:auto}
+#seg.cats{display:block!important;overflow:visible!important;margin:0!important;padding:0!important;min-height:0!important}
+.grps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+@media (min-width:1000px){.grps{grid-template-columns:repeat(6,minmax(0,1fr))}}
+#seg .gt{min-height:56px}
+#seg .gt b{white-space:normal!important;line-height:1.2}
+.subc{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;scroll-margin-top:72px}
+#seg .subc button{display:inline-flex!important;align-items:center;gap:6px;flex:none;min-height:40px!important;padding:8px 14px!important;border-radius:980px!important;border:1px solid var(--line);background:transparent;color:var(--ink);font:inherit;font-size:14px;font-weight:500;white-space:nowrap;cursor:pointer}
+#seg .subc button small{font-size:12.5px;color:var(--mute);margin:0}
+#seg .subc button[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:#17130b;font-weight:600}
+#seg .subc button[aria-pressed="true"] small{color:rgba(23,19,11,.7)}
+.promo-nm{min-height:2.5em}
+@media (max-width:699px){
+ .grps{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #seg .gt{min-height:54px!important;padding:7px 10px 7px 7px!important}
+ #seg .gt b{font-size:13.5px!important}
+ .subc{flex-wrap:nowrap;overflow-x:auto;margin:12px -16px 0;padding:2px 16px 6px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+ .subc::-webkit-scrollbar{display:none}
+ .promo-s{position:relative;padding:14px 14px 16px}
+ .promo-hd>div{min-width:0;flex:1 1 100%}
+ .promo-h{font-size:19px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ .promo .promo-sub{display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+ .promo-hd .btn{position:absolute;top:13px;right:14px;padding:4px 12px;font-size:12.5px;line-height:1.3}
 }
 </style>
 </head>
@@ -593,12 +621,12 @@ const present=new Set(P.map(p=>p[1]));
 const cats=["Все",...ORDER.filter(c=>c!=="Все"&&present.has(c)),...[...present].filter(c=>!ORDER.includes(c))];
 const nOf=c=>c==="Все"?P.length:P.filter(p=>p[1]===c).length;
 const word=n=>{const m=n%10,h=n%100;return m==1&&h!=11?"товар":(m>=2&&m<=4&&(h<12||h>14))?"товара":"товаров"};
-let cat="Все",q="",brand="Все",sort="";const PAGE=24;let lim=PAGE;
+let cat="Все",q="",brand="Все",sort="",grp="";const gOf=c=>(GROUPS.find(g=>g[1].includes(c))||[""])[0];const PAGE=24;let lim=PAGE;
 const TR={а:"a",б:"b",в:"v",г:"g",д:"d",е:"e",ё:"e",ж:"zh",з:"z",и:"i",й:"y",к:"k",л:"l",м:"m",н:"n",о:"o",п:"p",р:"r",с:"s",т:"t",у:"u",ф:"f",х:"h",ц:"c",ч:"ch",ш:"sh",щ:"sch",ъ:"",ы:"y",ь:"",э:"e",ю:"yu",я:"ya"};
 const slug=c=>c.toLowerCase().split("").map(ch=>TR[ch]??ch).join("").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
-const catUrl=()=>location.pathname+location.search+(cat!=="Все"?"#c="+slug(cat):"");
+const catUrl=()=>location.pathname+location.search+(cat!=="Все"?"#c="+slug(cat):grp?"#g="+slug(grp):"");
 const setCatHash=()=>{try{history.replaceState(null,"",catUrl())}catch(e){}};
-(function(){const m=location.hash.match(/^#c=(.+)$/);if(m){const f=[...new Set(P.map(p=>p[1]))].find(c=>slug(c)===decodeURIComponent(m[1]));if(f)cat=f}})();
+(function(){const m=location.hash.match(/^#c=(.+)$/);if(m){const f=[...new Set(P.map(p=>p[1]))].find(c=>slug(c)===decodeURIComponent(m[1]));if(f){cat=f;grp=gOf(f)}}const g=location.hash.match(/^#g=(.+)$/);if(g){const f=GROUPS.find(x=>slug(x[0])===decodeURIComponent(g[1]));if(f)grp=f[0]}})();
 const BR=["Sing-e", "HausRoland", "De’Longhi", "IPARAH", "WATSON", "Kemei", "SMART HOME", "VITEK", "VGR", "PRITECH", "MXMID", "Nokia", "Fitbit", "OLAX", "Hitachi", "Бирюса", "ATLANT", "CENTEK", "Beko", "LG", "Midea", "Gorenje", "Lebenhoff", "KitchenAid", "ITIMAT", "Hyundai", "Kuppersberg", "Bosch", "Indesit", "Miele", "Breville", "BaBylissPRO", "Roborock", "Dreame", "Dyson", "Samsung", "Tefal", "Braun", "REMAX", "SOKANY", "PROLISS", "CRONIER", "DEESPI", "LivePower", "KING", "MAC", "Hoco"];
 const BRN={"Fitbit": "Google Fitbit", "OLAX": "Olax", "ATLANT": "Atlant", "CENTEK": "Centek", "ITIMAT": "Itimat", "CRONIER": "Cronier", "KING": "King", "SOKANY": "Sokany", "PROLISS": "Proliss", "DEESPI": "Deespi", "REMAX": "Remax", "PRITECH": "Pritech"};
 const brandOf=n=>{for(const b of BR){if(new RegExp("(^|[^A-Za-z])"+b+"(?![A-Za-z])","i").test(n))return BRN[b]||b}return"Другие"};
@@ -625,12 +653,23 @@ document.getElementById("dlvlist").innerHTML='<h4>По Чечне</h4>'+DLV.filt
 document.addEventListener("error",e=>{const t=e.target;if(t.tagName!=="IMG")return;if(t.dataset.full&&!t.dataset.tried){t.dataset.tried=1;t.src=t.dataset.full}else{t.closest(".photo,.pvimg,.simc")?.classList.add("noimg");t.style.visibility="hidden"}},true);
 const rsOk=p=>p[3]>=RS.MIN;
 const waOrder=i=>{const p=P[i];return"https://wa.me/79280040943?text="+encodeURIComponent("Здравствуйте! Хочу заказать:\n"+p[0]+(p[3]?" — "+fmt(p[3]):"")+"\n"+pUrl(p[4]))};
+const gN=g=>P.filter(p=>gOf(p[1])===g).length;
+const gIco=g=>svg(((GROUPS.find(x=>x[0]===g)||[0,[]])[1].find(c=>present.has(c)))||"_");
+function catTiles(){
+  const gs=GROUPS.filter(([g,cs])=>cs.some(c=>present.has(c))).map(x=>x[0]);
+  const loose=[...present].filter(c=>!gOf(c));
+  let h='<div class="grps">'+gs.map(g=>`<button class="gt" type="button" data-g="${esc(g)}" aria-pressed="${g===grp}"><span class="ico">${gIco(g)}</span><span><b>${esc(g)}</b><small>${gN(g)} ${word(gN(g))}</small></span></button>`).join("")
+    +loose.map(c=>`<button class="gt" type="button" data-c="${esc(c)}" aria-pressed="${c===cat}"><span class="ico">${svg(c)}</span><span><b>${esc(c)}</b><small>${nOf(c)} ${word(nOf(c))}</small></span></button>`).join("")+'</div>';
+  if(grp){const cs=(GROUPS.find(x=>x[0]===grp)||[0,[]])[1].filter(c=>present.has(c));
+    h+='<div class="subc" role="group" aria-label="Разделы группы">'+`<button type="button" data-c="Все" aria-pressed="${cat==="Все"}">Все<small>${gN(grp)}</small></button>`
+      +cs.map(c=>`<button type="button" data-c="${esc(c)}" aria-pressed="${c===cat}">${esc(c)}<small>${nOf(c)}</small></button>`).join("")+'</div>'}
+  return h}
 function draw(){
   document.body.classList.toggle("srching",!!q);
   const tile=c=>`<button aria-pressed="${c===cat}" data-c="${esc(c)}"><span class="ico">${svg(c)}</span><span><b>${esc(c)}</b><small>${nOf(c)} ${word(nOf(c))}</small></span></button>`;
   const inG=new Set(GROUPS.flatMap(g=>g[1]));
-  seg.innerHTML=tile("Все")+GROUPS.map(([g,cs])=>{const l=cs.filter(c=>present.has(c));return l.length?`<div class="cgh">${esc(g)}</div>`+l.map(tile).join(""):""}).join("")+[...present].filter(c=>!inG.has(c)).map(tile).join("");
-  const base=P.filter(p=>(cat==="Все"||p[1]===cat)&&match(p,q));
+  seg.innerHTML=catTiles();
+  const base=P.filter(p=>(cat!=="Все"?p[1]===cat:(!grp||gOf(p[1])===grp))&&match(p,q));
   const bc={};base.forEach(p=>bc[p.b]=(bc[p.b]||0)+1);
   const bl=Object.keys(bc).sort((a,b)=>a==="Другие"?1:b==="Другие"?-1:a.localeCompare(b));
   if(brand!=="Все"&&!bc[brand])brand="Все";
@@ -640,7 +679,7 @@ function draw(){
   if(sort)list=list.slice().sort((a,b)=>sort==="asc"?a[3]-b[3]:b[3]-a[3]);
   else if(cat==="Все"){const oi=c=>{const k=ORDER.indexOf(c);return k<0?999:k};list=list.map((p,k)=>[p,k]).sort((a,b)=>oi(a[0][1])-oi(b[0][1])||a[1]-b[1]).map(x=>x[0])}
   const res=document.getElementById("res");
-  res.innerHTML=(cat==="Все"&&!q&&brand==="Все")?`<span>Все товары: <b>${list.length}</b></span>`:`<span>${q?`«<b>${esc(q)}</b>»${brand!=="Все"?" · "+esc(brand):""}: `:cat!=="Все"?`<b>${esc(cat)}</b>${brand!=="Все"?" · "+esc(brand):""}: `:brand!=="Все"?`<b>${esc(brand)}</b>: `:""}${list.length} ${word(list.length)}</span><span class="rbtn">${cat!=="Все"?'<button id="shcat">Ссылка на раздел</button>':''}<button id="reset">✕ Сбросить</button></span>`;
+  const lab=cat!=="Все"?cat:grp;res.innerHTML=(!lab&&!q&&brand==="Все")?`<span>Все товары: <b>${list.length}</b></span>`:`<span>${q?`«<b>${esc(q)}</b>»${brand!=="Все"?" · "+esc(brand):""}: `:lab?`<b>${esc(lab)}</b>${brand!=="Все"?" · "+esc(brand):""}: `:brand!=="Все"?`<b>${esc(brand)}</b>: `:""}${list.length} ${word(list.length)}</span><span class="rbtn">${cat!=="Все"?'<button id="shcat">Ссылка на раздел</button>':''}<button id="reset">✕ Сбросить</button></span>`;
   const total=list.length;list=list.slice(0,lim);
   const mb=document.getElementById("morebox");mb.innerHTML=total>lim?`<button class="more" id="more">Показать ещё ${Math.min(PAGE,total-lim)} <small>из ${total-lim}</small></button>`:"";
   const on=seg.querySelector('[aria-pressed="true"]');if(on&&matchMedia("(max-width:699px)").matches)seg.scrollLeft=Math.max(0,on.offsetLeft-16);
@@ -655,8 +694,8 @@ function draw(){
     </div>
   </article>`).join(""):`<div class="empty"><p><b>${q?`По запросу «${esc(q)}» ничего не найдено`:"Ничего не найдено"}</b></p><p>Проверьте написание или напишите нам — подберём и привезём.</p><div class="ebtns"><button type="button" id="reset2">Сбросить поиск</button><a class="btn" href="https://wa.me/79280040943?text=${encodeURIComponent("Здравствуйте! Ищу: "+(q||"технику")+". Есть в наличии?")}" target="_blank" rel="noopener">Спросить в WhatsApp</a></div></div>`;
 }
-seg.addEventListener("click",e=>{const b=e.target.closest("button");if(b){cat=b.dataset.c;lim=PAGE;setCatHash();draw();document.getElementById("res").scrollIntoView({behavior:"smooth",block:"start"})}});
-document.getElementById("res").addEventListener("click",async e=>{if(e.target.id==="reset"){cat="Все";lim=PAGE;q="";brand="Все";document.getElementById("q").value="";setCatHash();draw()}
+seg.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.g!==undefined){grp=b.dataset.g===grp?"":b.dataset.g;cat="Все"}else{cat=b.dataset.c;if(cat!=="Все")grp=gOf(cat)}lim=PAGE;setCatHash();draw();const t=seg.querySelector(".subc")||document.getElementById("res");t.scrollIntoView({behavior:"smooth",block:"start"})});
+document.getElementById("res").addEventListener("click",async e=>{if(e.target.id==="reset"){cat="Все";grp="";lim=PAGE;q="";brand="Все";document.getElementById("q").value="";setCatHash();draw()}
   if(e.target.id==="shcat"){const b=e.target,url=cUrl(cat);
     try{if(navigator.share){await navigator.share({title:cat+" — TEHNOODOM",url});return}}catch(er){return}
     try{await navigator.clipboard.writeText(url);b.textContent="Скопировано ✓";setTimeout(()=>b.textContent="Ссылка на раздел",1500)}catch(er){prompt("Ссылка на раздел:",url)}}});
@@ -748,7 +787,7 @@ $("pvsh").onclick=async()=>{const p=P[pv.dataset.i];const url=pUrl(p[4]);
 /* Слайды главной: заголовок + 5–6 товаров по ключам. Цены и фото берутся из каталога автоматически. */
 const PROMO=[
  {tag:"Новинки",h:"Новые поступления",sub:"Свежие поступления в магазин",auto:"new",keys:[]},
- {tag:"Рассрочка",h:"Исламская рассрочка DIRHAM",sub:"3, 6, 9 или 12 месяцев, со взносом и без. На товары от 25\u00a0000\u00a0₽",btn:"Подробнее",href:"rassrochka.html",keys:["f1096nd3","gab509clcl","ecam45086","x50","v15","ht611bb"]},
+ {tag:"Рассрочка",h:"Исламская рассрочка DIRHAM",sub:"3–12 месяцев, со взносом и без · от 25\u00a0000\u00a0₽",btn:"Подробнее",href:"rassrochka.html",keys:["f1096nd3","gab509clcl","ecam45086","x50","v15","ht611bb"]},
  {tag:"Подборка",h:"Шнековые соковыжималки",sub:"Сок без жмыха, широкая горловина",keys:["cr1124","cr1126","cr1123","kc1704","cr1157"]},
  {tag:"Подборка",h:"Укладка волос",sub:"Выпрямители, плойки и гофре",keys:["cr922","crkeratin","cr2047","sy3505","kp311a","iparah"]},
  {tag:"Подборка",h:"Эпиляторы и триммеры",sub:"Наборы с насадками для лица и тела",keys:["cr8801","km2192","km3523","cr8807","cr8806","cr8808"]},
@@ -858,7 +897,7 @@ const PROMO=[
 
 <script id="redesign-v1">
 (function(){if(typeof draw!=='function')return;
- const set=()=>document.body.classList.toggle('filt',cat!=="Все"||!!q||brand!=="Все");
+ const set=()=>document.body.classList.toggle('filt',cat!=="Все"||!!grp||!!q||brand!=="Все");
  const d=window.draw;window.draw=function(){const r=d.apply(this,arguments);set();return r};set();
 })();
 </script>
@@ -874,6 +913,14 @@ const PROMO=[
    const n=P.filter(p=>match(p,v)).length;goal("poisk",{q:v,n});if(!n)goal("poisk_net",{q:v})},1500)});
  /* new order number after each send */
  const sd=document.getElementById("send");if(sd)sd.addEventListener("click",()=>setTimeout(()=>{if(!Object.keys(cart).length||document.getElementById("err").style.display!=="block")window.__oid=null},0));
+})();
+</script>
+
+<script id="redesign-v3">
+(function(){if(typeof draw!=='function')return;const seg=document.getElementById('seg');
+ const fix=()=>{const r=seg.querySelector('.subc'),a=r&&r.querySelector('[aria-pressed="true"]');if(a&&r.scrollWidth>r.clientWidth)r.scrollLeft=Math.max(0,a.offsetLeft-16)};
+ const d=window.draw;window.draw=function(){const x=d.apply(this,arguments);fix();return x};
+ if(grp)draw();
 })();
 </script>
 </body>
